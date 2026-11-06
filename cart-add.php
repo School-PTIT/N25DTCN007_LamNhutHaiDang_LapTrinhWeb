@@ -26,7 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($product) {
         if ($product['stock'] <= 0) {
             $message = 'Thiết bị này hiện đã tạm thời hết hàng trong kho!';
-            set_flash('danger', $message);
+            if (!$is_ajax) {
+                set_flash('danger', $message);
+            }
         } else {
             if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart'])) {
                 $_SESSION['cart'] = [];
@@ -39,11 +41,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $new_qty = $product['stock'];
                 $message = "Kho chỉ còn {$product['stock']} thiết bị. Đã tự động điều chỉnh số lượng tối đa.";
                 $msg_type = 'warning';
-                set_flash('warning', $message);
+                if (!$is_ajax && !$is_express) {
+                    set_flash('warning', $message);
+                }
             } else {
                 $message = "Đã thêm '{$product['name']}' vào giỏ hàng!";
                 $msg_type = 'success';
-                set_flash('success', $message);
+                if (!$is_ajax && !$is_express) {
+                    set_flash('success', $message);
+                }
             }
 
             // Tiêu chí C3: Lưu số lượng vào session (Giá luôn lấy từ CSDL khi hiển thị)
@@ -54,16 +60,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
         $message = 'Không tìm thấy thiết bị cần thêm vào giỏ hàng.';
-        set_flash('danger', $message);
+        if (!$is_ajax) {
+            set_flash('danger', $message);
+        }
     }
 
     if ($is_ajax) {
         header('Content-Type: application/json');
         echo json_encode([
-            'success' => $success,
-            'message' => $message,
-            'type'    => $msg_type,
-            'cart_count' => cart_count()
+            'success'      => $success,
+            'message'      => $message,
+            'type'         => $msg_type,
+            'cart_count'   => cart_count(),
+            'product_name' => $product['name'] ?? ''
         ]);
         exit;
     }

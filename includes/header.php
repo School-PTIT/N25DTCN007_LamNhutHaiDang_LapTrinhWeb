@@ -14,7 +14,7 @@ $flash = get_flash();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= isset($page_title) ? e($page_title) . ' — ' : '' ?><?= e(APP_NAME) ?> // <?= e(APP_SUB_TITLE) ?></title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>css/style.css?v=4.7">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/style.css?v=4.8">
     <script>
         (function() {
             var saved = localStorage.getItem('theme');
@@ -115,14 +115,22 @@ $flash = get_flash();
     </div>
 </header>
 
-<!-- THÔNG BÁO FLASH MESSAGE (TIÊU CHÍ C2) -->
+<!-- THÔNG BÁO FLASH MESSAGE DẠNG POPUP SANG TRỌNG (TIÊU CHÍ C2) -->
 <?php if ($flash): ?>
-<div class="container" style="margin-top: 1.25rem;">
-    <div class="alert alert-<?= e($flash['type']) ?>" style="display: flex; align-items: center; gap: 0.65rem;">
-        <span><?= $flash['type'] === 'success' ? icon('check-circle', '', 18) : icon('alert-triangle', '', 18) ?></span>
-        <span><?= e($flash['message']) ?></span>
-    </div>
-</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.showAlertDialog) {
+            var flashType = <?= json_encode($flash['type'] === 'danger' ? 'danger' : ($flash['type'] === 'warning' ? 'warning' : ($flash['type'] === 'success' ? 'success' : 'info'))) ?>;
+            var flashTitle = flashType === 'success' ? 'Thành công!' : (flashType === 'danger' ? 'Thông báo lỗi' : (flashType === 'warning' ? 'Lưu ý' : 'Thông báo hệ thống'));
+            window.showAlertDialog({
+                title: flashTitle,
+                message: <?= json_encode($flash['message']) ?>,
+                buttonText: 'Đã hiểu',
+                type: flashType
+            });
+        }
+    });
+</script>
 <?php endif; ?>
 
 <main class="main-content">

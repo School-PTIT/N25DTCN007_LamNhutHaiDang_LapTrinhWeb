@@ -62,10 +62,10 @@ require_once __DIR__ . '/includes/header.php';
     </div>
 
     <!-- KHỐI CHI TIẾT SẢN PHẨM -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 3.5rem; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 2.5rem; box-shadow: var(--shadow-card);">
+    <div class="detail-card" style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 3.5rem; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 2.5rem; box-shadow: var(--shadow-card);">
         <!-- Cột trái: Ảnh sản phẩm khung Studio -->
         <div class="product-detail-img-box">
-            <img src="<?= BASE_URL ?>uploads/<?= e($product['image']) ?>" alt="<?= e($product['name']) ?>">
+            <img src="<?= BASE_URL ?>uploads/<?= e($product['image']) ?>" alt="<?= e($product['name']) ?>" class="detail-main-img">
         </div>
 
         <!-- Cột phải: Thông tin, Giá & Mua hàng -->
@@ -117,7 +117,7 @@ require_once __DIR__ . '/includes/header.php';
                     </div>
 
                     <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-                        <button type="submit" class="btn-action-primary" style="padding: 0.85rem 1.75rem; font-size: 0.92rem;">
+                        <button type="submit" class="btn-action-primary btn-add-cart-ajax" data-id="<?= $product['id'] ?>" data-name="<?= e($product['name']) ?>" style="padding: 0.85rem 1.75rem; font-size: 0.92rem;">
                             <?= icon('bag', '', 18) ?> Thêm Vào Giỏ
                         </button>
                         <button type="submit" name="express" value="1" class="btn-express-buy" title="Thêm vào giỏ và tiến hành thanh toán ngay lập tức">

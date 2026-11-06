@@ -26,18 +26,40 @@ def run_tests():
         add_btns = page.locator(".btn-add-cart-ajax")
         assert add_btns.count() >= 2, "Need at least 2 products on index.php"
         
+        modal_backdrop = page.locator("#studio-modal-backdrop")
+        cancel_btn = page.locator("#studio-modal-btn-cancel")
+        confirm_btn = page.locator("#studio-modal-btn-confirm")
+
         add_btns.nth(0).click()
-        page.wait_for_timeout(450)
+        page.wait_for_timeout(750)
+        assert "active" in (modal_backdrop.get_attribute("class") or ""), "Add to cart modal did not open on 1st item!"
+        page.screenshot(path=os.path.join(ARTIFACT_DIR, "verified_add_to_cart_popup_home.png"))
+        cancel_btn.click() # Click 'Tiếp tục mua sắm'
+        page.wait_for_timeout(250)
+
         add_btns.nth(1).click()
-        page.wait_for_timeout(450)
+        page.wait_for_timeout(750)
+        assert "active" in (modal_backdrop.get_attribute("class") or ""), "Add to cart modal did not open on 2nd item!"
+        cancel_btn.click() # Click 'Tiếp tục mua sắm'
+        page.wait_for_timeout(250)
 
         cart_badge = page.locator("#header-cart-count").inner_text().strip()
-        print(f"   -> Header cart count after adding 2 products: {cart_badge}")
+        print(f"   -> Header cart count after adding 2 products via Popup: {cart_badge}")
         assert int(cart_badge) >= 2, f"Expected cart count >= 2, got {cart_badge}"
 
-        print("2. Navigating to cart.php to test Single Item Remove...")
-        page.goto(f"{BASE_URL}/cart.php", wait_until="networkidle")
-        
+        print("1.5 Testing Add to Cart Popup on Product Detail Page (product.php)...")
+        page.goto(f"{BASE_URL}/product.php?id=1", wait_until="networkidle")
+        detail_add_btn = page.locator(".btn-add-cart-ajax").first
+        detail_add_btn.click()
+        page.wait_for_timeout(750)
+        assert "active" in (modal_backdrop.get_attribute("class") or ""), "Add to cart modal did not open on product.php!"
+        page.screenshot(path=os.path.join(ARTIFACT_DIR, "verified_add_to_cart_popup_detail.png"))
+        confirm_btn.click() # Click 'Xem giỏ hàng ngay' -> should navigate to cart.php!
+        page.wait_for_load_state("networkidle")
+        assert "cart.php" in page.url, f"Expected redirect to cart.php when clicking Xem giỏ hàng ngay, got {page.url}"
+        print("   -> Product Detail Add-to-Cart Popup & 'Xem giỏ hàng ngay' navigation: PASS")
+
+        print("2. Testing Single Item Remove on cart.php...")
         rows_before = page.locator("tr[id^='cart-row-']").count()
         print(f"   -> Cart rows before remove: {rows_before}")
         assert rows_before >= 2, "Expected at least 2 rows in cart"
@@ -48,12 +70,10 @@ def run_tests():
         page.wait_for_timeout(300)
 
         # Verify Custom Modal Appears
-        modal_backdrop = page.locator("#studio-modal-backdrop")
         assert "active" in (modal_backdrop.get_attribute("class") or ""), "Custom modal did not open on remove click!"
         page.screenshot(path=os.path.join(ARTIFACT_DIR, "verified_delete_item_modal.png"))
 
         # Click Confirm Delete inside custom modal
-        confirm_btn = page.locator("#studio-modal-btn-confirm")
         confirm_btn.click()
         page.wait_for_timeout(500)
 

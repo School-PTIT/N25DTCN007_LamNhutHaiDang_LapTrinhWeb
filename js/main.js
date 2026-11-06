@@ -420,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function () {
   initThemeToggle();
 
   // ============================================================================
-  // 1. AJAX THÊM VÀO GIỎ HÀNG KHÔNG GIÁN ĐOẠN TRANG CHỦ
+  // 1. AJAX THÊM VÀO GIỎ HÀNG KHÔNG GIÁN ĐOẠN TRANG CHỦ & TRANG CHI TIẾT (KÈM POPUP)
   // ============================================================================
   document.addEventListener('click', function (e) {
     const btn = e.target.closest('.btn-add-cart-ajax');
@@ -429,7 +429,11 @@ document.addEventListener('DOMContentLoaded', function () {
     e.preventDefault();
     const productId = btn.getAttribute('data-id');
     const productName = btn.getAttribute('data-name') || 'Thiết bị';
-    const csrfToken = window.CSRF_TOKEN || '';
+    const form = btn.closest('form');
+    const csrfInput = form ? form.querySelector('input[name="csrf_token"]') : null;
+    const csrfToken = (csrfInput ? csrfInput.value : '') || window.CSRF_TOKEN || '';
+    const qtyInput = form ? form.querySelector('input[name="quantity"]') : null;
+    const quantity = qtyInput ? Math.max(1, parseInt(qtyInput.value, 10) || 1) : 1;
 
     // Tìm thẻ ảnh sản phẩm để kích hoạt hiệu ứng bay parabol vào giỏ hàng
     const card = btn.closest('.precision-card, .product-card, .detail-card, .product-item, .manifest-card, article');
@@ -446,17 +450,45 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch(`${window.BASE_URL || ''}cart-add.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `product_id=${encodeURIComponent(productId)}&quantity=1&ajax=1&csrf_token=${encodeURIComponent(csrfToken)}`
+      body: `product_id=${encodeURIComponent(productId)}&quantity=${encodeURIComponent(quantity)}&ajax=1&csrf_token=${encodeURIComponent(csrfToken)}`
     })
       .then(res => res.json())
       .then(data => {
         if (data.success) {
           btn.innerHTML = '<svg class="svg-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Đã thêm!';
           btn.classList.add('btn-added-success');
-          window.showToast(`Đã thêm <strong>${productName}</strong> vào giỏ!`, 'success');
           if (typeof data.cart_count !== 'undefined') {
             window.updateHeaderCartCount(data.cart_count);
           }
+
+          // Hiển thị Popup Modal sang trọng sau khi đồng xu bay vào giỏ hàng (540ms)
+          const popupDelay = img ? 560 : 80;
+          setTimeout(() => {
+            if (data.type === 'warning') {
+              window.showConfirmDialog({
+                title: 'Đã điều chỉnh số lượng tối đa',
+                message: data.message || `Kho đã đạt giới hạn tồn kho cho <strong>${productName}</strong>.`,
+                confirmText: 'Xem giỏ hàng',
+                cancelText: 'Tiếp tục mua sắm',
+                type: 'warning',
+                onConfirm: () => {
+                  window.location.href = `${window.BASE_URL || ''}cart.php`;
+                }
+              });
+            } else {
+              window.showConfirmDialog({
+                title: 'Đã thêm vào giỏ hàng!',
+                message: `Thiết bị <strong>${productName}</strong> (Số lượng: <strong>${quantity}</strong>) đã được thêm vào giỏ hàng của bạn. Hiện giỏ hàng đang có <strong>${data.cart_count || 1}</strong> sản phẩm.`,
+                confirmText: 'Xem giỏ hàng ngay',
+                cancelText: 'Tiếp tục mua sắm',
+                type: 'success',
+                onConfirm: () => {
+                  window.location.href = `${window.BASE_URL || ''}cart.php`;
+                }
+              });
+            }
+          }, popupDelay);
+
           setTimeout(() => {
             btn.innerHTML = originalHtml;
             btn.classList.remove('btn-added-success');
@@ -465,14 +497,24 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
           btn.innerHTML = originalHtml;
           btn.disabled = false;
-          window.showToast(data.message || 'Không thể thêm sản phẩm.', 'warning');
+          window.showAlertDialog({
+            title: 'Không thể thêm vào giỏ',
+            message: data.message || 'Không thể thêm sản phẩm này vào giỏ hàng.',
+            buttonText: 'Đã hiểu',
+            type: 'warning'
+          });
         }
       })
       .catch(err => {
         btn.innerHTML = originalHtml;
         btn.disabled = false;
         console.error('Lỗi thêm giỏ hàng:', err);
-        window.showToast('Lỗi kết nối máy chủ.', 'error');
+        window.showAlertDialog({
+          title: 'Lỗi kết nối',
+          message: 'Không thể kết nối tới máy chủ. Vui lòng thử lại.',
+          buttonText: 'Đóng',
+          type: 'danger'
+        });
       });
   });
 
