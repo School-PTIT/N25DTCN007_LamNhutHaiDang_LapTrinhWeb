@@ -15,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 1. Xóa toàn bộ giỏ hàng
     if ($action === 'clear') {
         $_SESSION['cart'] = [];
-        set_flash('info', 'Đã xóa toàn bộ thiết bị trong giỏ hàng.');
 
         if ($is_ajax) {
             header('Content-Type: application/json');
@@ -30,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
+        set_flash('info', 'Đã xóa toàn bộ thiết bị trong giỏ hàng.');
         header('Location: ' . BASE_URL . 'cart.php');
         exit;
     }
@@ -39,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $product_id = (int)($_POST['product_id'] ?? 0);
         if (isset($_SESSION['cart'][$product_id])) {
             unset($_SESSION['cart'][$product_id]);
-            set_flash('info', 'Đã loại bỏ thiết bị khỏi giỏ hàng.');
         }
 
         if ($is_ajax) {
@@ -62,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
+        set_flash('info', 'Đã loại bỏ thiết bị khỏi giỏ hàng.');
         header('Location: ' . BASE_URL . 'cart.php');
         exit;
     }

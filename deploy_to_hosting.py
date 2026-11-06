@@ -9,10 +9,15 @@ FTP_USER = "if0_43372666"
 FTP_PASS = "xununam449977"
 
 files_to_upload = [
-    ("css/style.css", "htdocs/css/style.css"),
-    ("js/main.js", "htdocs/js/main.js"),
+    ("index.php", "htdocs/index.php"),
+    ("product.php", "htdocs/product.php"),
+    ("cart-update.php", "htdocs/cart-update.php"),
+    ("config/db.php", "htdocs/config/db.php"),
+    ("includes/functions.php", "htdocs/includes/functions.php"),
     ("includes/header.php", "htdocs/includes/header.php"),
     ("includes/footer.php", "htdocs/includes/footer.php"),
+    ("css/style.css", "htdocs/css/style.css"),
+    ("js/main.js", "htdocs/js/main.js"),
 ]
 
 print("Connecting to FTP...")
@@ -27,4 +32,4 @@ for local_path, remote_path in files_to_upload:
     print(f"[OK] Uploaded {remote_path}")
 
 ftp.quit()
-print("\nAll realistic motion files successfully deployed to hosting https://n25dtcn007-haidang.rf.gd/ !")
+print("\nAll Ultrathinking UX/UI files successfully deployed to https://n25dtcn007-haidang.rf.gd/ !")

@@ -48,6 +48,6 @@
     <?= icon('arrow-up', 'no-margin', 18) ?>
 </button>
 
-<script src="<?= BASE_URL ?>js/main.js?v=4.6"></script>
+<script src="<?= BASE_URL ?>js/main.js?v=4.7"></script>
 </body>
 </html>

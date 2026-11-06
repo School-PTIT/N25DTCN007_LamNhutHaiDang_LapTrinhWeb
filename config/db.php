@@ -12,7 +12,28 @@ function get_db_connection() {
     static $pdo = null;
 
     if ($pdo === null) {
-        // 1. Thử kết nối tới MySQL / MariaDB (Mặc định cho Laragon & XAMPP)
+        $sqlite_file = ROOT_PATH . 'database' . DIRECTORY_SEPARATOR . 'final_web.sqlite';
+        $is_local_dev = in_array(DB_HOST, ['127.0.0.1', 'localhost'], true);
+
+        // Nếu đang chạy môi trường cục bộ mà có sẵn tệp SQLite và cổng MySQL 3306 chưa mở -> dùng ngay SQLite (0ms delay!)
+        if ($is_local_dev && file_exists($sqlite_file)) {
+            $fp = @fsockopen(DB_HOST, (int)DB_PORT, $errno, $errstr, 0.15);
+            if (!$fp) {
+                try {
+                    $pdo = new PDO("sqlite:" . $sqlite_file);
+                    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                    $pdo->exec("PRAGMA foreign_keys = ON;");
+                    return $pdo;
+                } catch (Throwable $sqle) {
+                    // Tiếp tục thử MySQL bên dưới nếu cần
+                }
+            } else {
+                fclose($fp);
+            }
+        }
+
+        // 1. Thử kết nối tới MySQL / MariaDB (Mặc định cho Laragon, XAMPP & Hosting)
         try {
             $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
             $options = [

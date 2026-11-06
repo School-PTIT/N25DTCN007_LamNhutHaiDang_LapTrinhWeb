@@ -77,9 +77,10 @@ document.addEventListener('DOMContentLoaded', function () {
       function closeModal(result) {
         modalBackdrop.classList.remove('active');
         document.body.classList.remove('modal-open');
-        if (activeModalResolve) {
-          activeModalResolve(result);
-          activeModalResolve = null;
+        const resolver = activeModalResolve;
+        activeModalResolve = null;
+        if (resolver) {
+          resolver(result);
         }
       }
 
@@ -757,8 +758,8 @@ document.addEventListener('DOMContentLoaded', function () {
       type: 'danger',
       onConfirm: () => {
         const form = el.closest('form');
-        if (el.type === 'submit' && form) {
-          form.submit();
+        if (form) {
+          HTMLFormElement.prototype.submit.call(form);
         } else if (el.tagName === 'A' && el.href) {
           window.location.href = el.href;
         }
@@ -863,7 +864,8 @@ document.addEventListener('DOMContentLoaded', function () {
         formData.delete('q');
         const params = new URLSearchParams(formData);
         const queryStr = params.toString();
-        const url = form.action.split('?')[0] + (queryStr ? '?' + queryStr : '');
+        const baseAction = (form.getAttribute('action') || window.location.pathname).split('?')[0];
+        const url = baseAction + (queryStr ? '?' + queryStr : '');
         loadCatalogAjax(url, true);
       }
       return;
@@ -888,7 +890,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         const params = new URLSearchParams(formData);
         const queryStr = params.toString();
-        const url = form.action.split('?')[0] + (queryStr ? '?' + queryStr : '');
+        const baseAction = (form.getAttribute('action') || window.location.pathname).split('?')[0];
+        const url = baseAction + (queryStr ? '?' + queryStr : '');
         loadCatalogAjax(url, true);
       }, 260);
     }
@@ -902,7 +905,8 @@ document.addEventListener('DOMContentLoaded', function () {
       const formData = new FormData(form);
       const params = new URLSearchParams(formData);
       const queryStr = params.toString();
-      const url = form.action.split('?')[0] + (queryStr ? '?' + queryStr : '');
+      const baseAction = (form.getAttribute('action') || window.location.pathname).split('?')[0];
+      const url = baseAction + (queryStr ? '?' + queryStr : '');
       loadCatalogAjax(url, true);
     }
   });
@@ -914,7 +918,8 @@ document.addEventListener('DOMContentLoaded', function () {
       if (form) {
         const formData = new FormData(form);
         const params = new URLSearchParams(formData);
-        const url = form.action.split('?')[0] + '?' + params.toString();
+        const baseAction = (form.getAttribute('action') || window.location.pathname).split('?')[0];
+        const url = baseAction + '?' + params.toString();
         loadCatalogAjax(url, false);
       }
     }
@@ -942,9 +947,11 @@ document.addEventListener('DOMContentLoaded', function () {
       onConfirm: () => {
         const productId = removeBtn.getAttribute('data-id');
         const row = document.getElementById(`cart-row-${productId}`);
-        const csrfToken = window.CSRF_TOKEN || '';
+        const csrfInput = form.querySelector('input[name="csrf_token"]');
+        const csrfToken = (csrfInput ? csrfInput.value : '') || window.CSRF_TOKEN || '';
+        const actionUrl = form.getAttribute('action') || `${window.BASE_URL || ''}cart-update.php`;
 
-        fetch(form.action, {
+        fetch(actionUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: `action=remove&product_id=${encodeURIComponent(productId)}&ajax=1&csrf_token=${encodeURIComponent(csrfToken)}`
@@ -967,7 +974,7 @@ document.addEventListener('DOMContentLoaded', function () {
               if (data.is_empty) {
                 setTimeout(() => {
                   window.location.reload();
-                }, 600);
+                }, 400);
               }
             }
           })
@@ -993,9 +1000,11 @@ document.addEventListener('DOMContentLoaded', function () {
       cancelText: 'Hủy bỏ',
       type: 'danger',
       onConfirm: () => {
-        const csrfToken = window.CSRF_TOKEN || '';
+        const csrfInput = form.querySelector('input[name="csrf_token"]');
+        const csrfToken = (csrfInput ? csrfInput.value : '') || window.CSRF_TOKEN || '';
+        const actionUrl = form.getAttribute('action') || `${window.BASE_URL || ''}cart-update.php`;
 
-        fetch(form.action, {
+        fetch(actionUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: `action=clear&ajax=1&csrf_token=${encodeURIComponent(csrfToken)}`
@@ -1024,9 +1033,11 @@ document.addEventListener('DOMContentLoaded', function () {
       e.preventDefault();
       const codeInput = document.getElementById('voucher-input-code');
       const code = codeInput ? codeInput.value.trim() : '';
-      const csrfToken = window.CSRF_TOKEN || '';
+      const csrfInput = voucherForm.querySelector('input[name="csrf_token"]');
+      const csrfToken = (csrfInput ? csrfInput.value : '') || window.CSRF_TOKEN || '';
+      const actionUrl = voucherForm.getAttribute('action') || window.location.href;
 
-      fetch(voucherForm.action, {
+      fetch(actionUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `action_voucher=1&voucher_code=${encodeURIComponent(code)}&ajax=1&csrf_token=${encodeURIComponent(csrfToken)}`
@@ -1090,9 +1101,11 @@ document.addEventListener('DOMContentLoaded', function () {
       const orderIdInput = form.querySelector('input[name="order_id"]');
       const orderId = orderIdInput ? orderIdInput.value : '';
       const newStatus = select.value;
-      const csrfToken = window.CSRF_TOKEN || '';
+      const csrfInput = form.querySelector('input[name="csrf_token"]');
+      const csrfToken = (csrfInput ? csrfInput.value : '') || window.CSRF_TOKEN || '';
+      const actionUrl = form.getAttribute('action') || window.location.href;
 
-      fetch(form.action, {
+      fetch(actionUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `order_id=${encodeURIComponent(orderId)}&status=${encodeURIComponent(newStatus)}&ajax=1&csrf_token=${encodeURIComponent(csrfToken)}`
@@ -1129,9 +1142,11 @@ document.addEventListener('DOMContentLoaded', function () {
       onConfirm: () => {
         const orderIdInput = cancelForm.querySelector('input[name="order_id"]');
         const orderId = orderIdInput ? orderIdInput.value : '';
-        const csrfToken = window.CSRF_TOKEN || '';
+        const csrfInput = cancelForm.querySelector('input[name="csrf_token"]');
+        const csrfToken = (csrfInput ? csrfInput.value : '') || window.CSRF_TOKEN || '';
+        const actionUrl = cancelForm.getAttribute('action') || `${window.BASE_URL || ''}order-cancel.php`;
 
-        fetch(cancelForm.action, {
+        fetch(actionUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: `order_id=${encodeURIComponent(orderId)}&ajax=1&csrf_token=${encodeURIComponent(csrfToken)}`
