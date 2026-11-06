@@ -108,23 +108,21 @@ require_once __DIR__ . '/includes/header.php';
     <!-- Thanh tìm kiếm & Sắp xếp -->
     <div class="filter-actions">
         <!-- Form tìm kiếm theo tên (Tiêu chí B4) -->
-        <form action="<?= BASE_URL ?>" method="GET" class="search-form">
+        <form action="<?= BASE_URL ?>" method="GET" class="search-form" id="catalog-search-form">
             <?php if ($category_id > 0): ?>
                 <input type="hidden" name="cat" value="<?= $category_id ?>">
             <?php endif; ?>
             <?php if ($sort !== 'newest'): ?>
                 <input type="hidden" name="sort" value="<?= e($sort) ?>">
             <?php endif; ?>
-            <input type="text" name="q" value="<?= e($keyword) ?>" placeholder="Tìm kiếm theo tên thiết bị, SKU..." class="search-input">
-            <?php if (!empty($keyword)): ?>
-                <button type="button" class="search-clear-btn" title="Xóa tìm kiếm"><?= icon('x', 'no-margin', 14) ?></button>
-            <?php endif; ?>
+            <input type="text" name="q" id="catalog-search-input" value="<?= e($keyword) ?>" placeholder="Tìm kiếm nhanh thiết bị, mã SKU..." class="search-input" autocomplete="off">
+            <button type="button" class="search-clear-btn" id="catalog-search-clear" title="Xóa tìm kiếm" style="<?= empty($keyword) ? 'display: none;' : '' ?>"><?= icon('x', 'no-margin', 14) ?></button>
             <button type="submit" class="search-btn" title="Tìm kiếm"><?= icon('search', 'no-margin', 16) ?></button>
         </form>
 
         <div style="display: flex; align-items: center; gap: 1.5rem;">
             <!-- Tiêu chí B7: Hiển thị thông báo Tìm thấy N sản phẩm -->
-            <div class="result-count">
+            <div class="result-count" id="catalog-result-count">
                 Tìm thấy <strong><?= $total_products ?></strong> sản phẩm
             </div>
 
@@ -139,7 +137,7 @@ require_once __DIR__ . '/includes/header.php';
                 <label for="sort-select" style="font-weight: 500; display: inline-flex; align-items: center; gap: 0.3rem;">
                     <?= icon('sliders', '', 14) ?> Sắp xếp:
                 </label>
-                <select name="sort" id="sort-select" class="sort-select" onchange="document.getElementById('sort-form').submit();">
+                <select name="sort" id="sort-select" class="sort-select">
                     <option value="newest" <?= $sort === 'newest' ? 'selected' : '' ?>>Mới nhất</option>
                     <option value="price_asc" <?= $sort === 'price_asc' ? 'selected' : '' ?>>Giá tăng dần</option>
                     <option value="price_desc" <?= $sort === 'price_desc' ? 'selected' : '' ?>>Giá giảm dần</option>
@@ -150,7 +148,7 @@ require_once __DIR__ . '/includes/header.php';
 </section>
 
 <!-- LƯỚI SẢN PHẨM RESPONSIVE (TIÊU CHÍ A4 & A5) -->
-<section class="container" style="padding-top: 0.5rem;">
+<section class="container" id="catalog-grid-section" style="padding-top: 0.5rem;">
     <?php if (empty($products)): ?>
         <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 4rem 2rem; text-align: center; box-shadow: var(--shadow-card);">
             <div style="margin-bottom: 0.75rem; color: var(--text-muted);"><?= icon('box', '', 44) ?></div>
@@ -199,7 +197,7 @@ require_once __DIR__ . '/includes/header.php';
                             <div class="spec-chips">
                                 <?php foreach ($specs as $key => $val): ?>
                                     <?php if ($chip_count < 2): ?>
-                                        <span class="spec-chip"><?= e(mb_substr($val, 0, 24)) ?></span>
+                                        <span class="spec-chip" title="<?= e($key . ': ' . $val) ?>"><?= e(format_spec_chip($val)) ?></span>
                                         <?php $chip_count++; ?>
                                     <?php endif; ?>
                                 <?php endforeach; ?>

@@ -248,3 +248,21 @@ function icon($name, $class = '', $size = 18) {
         $path
     );
 }
+
+/**
+ * Rút gọn thông số kỹ thuật thông minh cho Spec Chip (Không cắt cụt giữa từ)
+ */
+function format_spec_chip($val) {
+    $clean = trim(preg_replace('/\s*\([^)]*\)/u', '', (string)$val));
+    $parts = preg_split('/,\s+/u', $clean);
+    $clean = trim($parts[0] ?? $clean);
+    if (mb_strlen($clean, 'UTF-8') > 30) {
+        $sub = mb_substr($clean, 0, 29, 'UTF-8');
+        $last_space = mb_strrpos($sub, ' ', 0, 'UTF-8');
+        if ($last_space !== false && $last_space > 12) {
+            $sub = mb_substr($sub, 0, $last_space, 'UTF-8');
+        }
+        return $sub . '…';
+    }
+    return $clean;
+}

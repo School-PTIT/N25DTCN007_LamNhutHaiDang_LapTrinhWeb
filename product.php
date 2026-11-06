@@ -64,8 +64,8 @@ require_once __DIR__ . '/includes/header.php';
     <!-- KHỐI CHI TIẾT SẢN PHẨM -->
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 3.5rem; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 2.5rem; box-shadow: var(--shadow-card);">
         <!-- Cột trái: Ảnh sản phẩm khung Studio -->
-        <div class="product-detail-img-box" style="border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 2.5rem; display: flex; align-items: center; justify-content: center;">
-            <img src="<?= BASE_URL ?>uploads/<?= e($product['image']) ?>" alt="<?= e($product['name']) ?>" style="max-height: 340px; width: auto; object-fit: contain;">
+        <div class="product-detail-img-box">
+            <img src="<?= BASE_URL ?>uploads/<?= e($product['image']) ?>" alt="<?= e($product['name']) ?>">
         </div>
 
         <!-- Cột phải: Thông tin, Giá & Mua hàng -->
@@ -175,7 +175,7 @@ require_once __DIR__ . '/includes/header.php';
                             <span class="stock-tag ready"><span class="status-indicator-dot dot-ready"></span> Còn <?= $rel['stock'] ?></span>
                         </div>
                         <a href="<?= BASE_URL ?>product.php?id=<?= $rel['id'] ?>" class="card-img-wrap">
-                            <img src="<?= BASE_URL ?>uploads/<?= e($rel['image']) ?>" alt="<?= e($rel['name']) ?>" style="max-height: 130px;">
+                            <img src="<?= BASE_URL ?>uploads/<?= e($rel['image']) ?>" alt="<?= e($rel['name']) ?>" loading="lazy">
                         </a>
                         <div class="card-body">
                             <h3 class="card-title" style="font-size: 0.92rem; height: 2.5rem;">
