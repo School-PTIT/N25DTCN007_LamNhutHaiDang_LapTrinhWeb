@@ -14,7 +14,7 @@ $flash = get_flash();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= isset($page_title) ? e($page_title) . ' — ' : '' ?><?= e(APP_NAME) ?> // <?= e(APP_SUB_TITLE) ?></title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>css/style.css?v=2.1">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/style.css?v=2.2">
     <script>window.BASE_URL = '<?= BASE_URL ?>'; window.CSRF_TOKEN = '<?= csrf_token() ?>';</script>
 </head>
 <body>
@@ -77,14 +77,14 @@ $flash = get_flash();
                 </a>
 
                 <?php if (is_logged_in()): ?>
-                    <div style="display: flex; align-items: center; gap: 0.4rem;">
+                    <div style="display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0; white-space: nowrap;">
                         <a href="<?= BASE_URL ?>orders.php" class="nav-link <?= $current_page === 'orders.php' ? 'active' : '' ?>">
                             <?= icon('receipt', '', 15) ?> Đơn hàng
                         </a>
                         <a href="<?= BASE_URL ?>profile.php" class="nav-link <?= $current_page === 'profile.php' ? 'active' : '' ?>" style="font-weight: 600;">
                             <?= icon('user', '', 15) ?> <?= e(mb_substr(current_user()['name'], 0, 10)) ?>...
                         </a>
-                        <a href="<?= BASE_URL ?>logout.php" class="btn-icon" title="Đăng xuất" style="padding: 0.4rem 0.65rem; color: var(--status-alert);">
+                        <a href="<?= BASE_URL ?>logout.php" class="btn-icon" title="Đăng xuất" style="padding: 0.4rem 0.65rem; color: var(--status-alert); flex-shrink: 0;">
                             <?= icon('logout', 'no-margin', 14) ?>
                         </a>
                     </div>

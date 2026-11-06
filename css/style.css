@@ -222,11 +222,15 @@ img {
   font-size: 0.88rem;
   font-weight: 500;
   color: var(--text-secondary);
-  padding: 0.5rem 0.95rem;
+  padding: 0.45rem 0.75rem;
   border-radius: var(--radius-full);
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-decoration: none;
+  line-height: 1.2;
   transition: var(--transition-smooth);
 }
 
@@ -617,7 +621,7 @@ img {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
-  padding: 0.45rem 0.25rem;
+  padding: 0.45rem 0.75rem;
   border-radius: var(--radius-full);
   cursor: pointer;
   font-size: 0.82rem;
@@ -628,7 +632,11 @@ img {
   white-space: nowrap;
   text-decoration: none;
   transition: var(--transition-smooth);
+}
+
+.card-actions .btn-icon {
   width: 100%;
+  padding: 0.45rem 0.25rem;
 }
 
 .btn-icon:hover {
