@@ -60,7 +60,7 @@ require_once __DIR__ . '/includes/header.php';
         <div>
             <h1 style="font-size: 1.6rem; font-weight: 800; margin: 0;"><?= e(APP_NAME) ?></h1>
             <div style="font-size: 0.85rem; color: #555555; margin-top: 0.25rem;">STUDIO & BOUTIQUE · EST. 2026</div>
-            <div style="font-size: 0.85rem; font-weight: 600; margin-top: 0.5rem;">MSSV: <?= e(APP_STUDENT_ID) ?> — <?= e(APP_STUDENT_NAME) ?></div>
+            <div style="font-size: 0.85rem; font-weight: 600; margin-top: 0.5rem;">MSSV: <?= e(APP_STUDENT_ID) ?> — <?= e(APP_FOUNDER) ?></div>
         </div>
         <div style="text-align: right;">
             <h2 style="font-size: 1.25rem; font-weight: 700; margin: 0;">PHIẾU GIAO HÀNG & BẢO HÀNH</h2>

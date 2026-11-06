@@ -303,7 +303,7 @@ require_once __DIR__ . '/includes/header.php';
                     <div>
                         <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.8;">
                             <div>Ngân hàng: <strong style="color: var(--text-primary);">MB Bank (Quân Đội)</strong></div>
-                            <div>Chủ tài khoản: <strong style="color: var(--text-primary);"><?= e(APP_STUDENT_NAME) ?></strong></div>
+                            <div>Chủ tài khoản: <strong style="color: var(--text-primary);"><?= e(APP_FOUNDER) ?></strong></div>
                             <div>Số tài khoản: <strong style="font-family: var(--font-mono); color: var(--text-primary);">0987 654 321</strong></div>
                             <div>Số tiền: <strong id="vietqr-total-display" style="color: var(--status-live);"><?= format_currency($final_total) ?></strong></div>
                             <div>Nội dung: <strong style="font-family: var(--font-mono); color: var(--accent-gold);">MSSV <?= e(APP_STUDENT_ID) ?></strong></div>
@@ -324,23 +324,42 @@ require_once __DIR__ . '/includes/header.php';
             </form>
         </div>
 
-        <!-- Cột phải: Bản tóm tắt giỏ hàng & Nhập Voucher -->
+        <!-- Cột phải: Bản tóm tắt giỏ hàng chi tiết từng món & Nhập Voucher -->
         <div>
             <div class="manifest-card" style="margin-bottom: 1.5rem;">
-                <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--text-primary);">
-                    Tóm Tắt Đơn Hàng (<?= count($cart_items) ?> thiết bị)
-                </h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                    <h2 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">
+                        Chi Tiết Đơn Hàng
+                    </h2>
+                    <span class="badge-status badge-shipping" style="font-weight: 600;">
+                        <?= count($cart_items) ?> thiết bị
+                    </span>
+                </div>
 
-                <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 1.5rem;">
+                <!-- Danh sách chi tiết từng món hàng, hình ảnh, đơn giá, số lượng & thành tiền -->
+                <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
                     <?php foreach ($cart_items as $item): ?>
-                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f2f5; padding-bottom: 0.75rem;">
-                            <div style="max-width: 70%;">
-                                <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-primary);"><?= e($item['name']) ?></div>
-                                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">
-                                    <?= e($item['sku']) ?> · SL: <?= $item['quantity'] ?>
+                        <div style="display: flex; gap: 0.85rem; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.85rem;">
+                            <img src="<?= BASE_URL ?>uploads/<?= e($item['image']) ?>" 
+                                 alt="<?= e($item['name']) ?>" 
+                                 style="width: 52px; height: 52px; object-fit: contain; background: var(--bg-subtle); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); padding: 4px; flex-shrink: 0;">
+                            
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    <a href="<?= BASE_URL ?>product.php?id=<?= $item['id'] ?>" style="color: inherit; text-decoration: none;" title="<?= e($item['name']) ?>">
+                                        <?= e($item['name']) ?>
+                                    </a>
+                                </div>
+                                <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.2rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                    <span>Mã: <code style="font-size: 0.75rem;"><?= e($item['sku']) ?></code></span>
+                                    <span>·</span>
+                                    <span>Đơn giá: <strong style="color: var(--text-secondary);"><?= format_currency($item['price']) ?></strong></span>
+                                    <span>·</span>
+                                    <span>SL: <strong style="color: var(--text-primary);">× <?= $item['quantity'] ?></strong></span>
                                 </div>
                             </div>
-                            <div style="font-weight: 700; font-size: 0.92rem; color: var(--text-primary);">
+
+                            <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary); text-align: right; flex-shrink: 0;">
                                 <?= format_currency($item['subtotal']) ?>
                             </div>
                         </div>
@@ -361,28 +380,42 @@ require_once __DIR__ . '/includes/header.php';
                     <?= icon('alert-triangle', '', 12) ?> <span id="voucher-error-text"><?= e($voucher_error ?? '') ?></span>
                 </div>
 
-                <div id="voucher-discount-wrap" style="display: <?= $discount_amount > 0 ? 'block' : 'none' ?>;">
-                    <div class="voucher-discount-row">
-                        <span id="voucher-label-display">Ưu đãi (<?= e($voucher_code) ?> -<?= $discount_percent ?>%):</span>
-                        <span id="voucher-amount-display">-<?= format_currency($discount_amount) ?></span>
+                <!-- Bảng hạch toán chi tiết chi phí -->
+                <div style="display: flex; flex-direction: column; gap: 0.65rem; margin-top: 1rem; font-size: 0.88rem;">
+                    <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                        <span>Tạm tính (<?= count($cart_items) ?> món):</span>
+                        <strong style="color: var(--text-primary);"><?= format_currency($grand_total) ?></strong>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                        <span>Vận chuyển &amp; đồng kiểm:</span>
+                        <span style="color: var(--status-live); font-weight: 600;">Miễn phí</span>
+                    </div>
+
+                    <div id="voucher-discount-wrap" style="display: <?= $discount_amount > 0 ? 'block' : 'none' ?>;">
+                        <div class="voucher-discount-row">
+                            <span id="voucher-label-display">Ưu đãi (<?= e($voucher_code) ?> -<?= $discount_percent ?>%):</span>
+                            <span id="voucher-amount-display">-<?= format_currency($discount_amount) ?></span>
+                        </div>
                     </div>
                 </div>
 
-                <div style="border-top: 1px solid var(--border-subtle); padding-top: 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+                <!-- Dòng Tổng Giá Tiền Thanh Toán Nổi Bật -->
+                <div style="border-top: 1px solid var(--border-subtle); margin-top: 1rem; padding-top: 1.25rem; display: flex; justify-content: space-between; align-items: baseline;">
                     <div>
-                        <div style="color: var(--text-secondary); font-size: 0.85rem; font-weight: 500;">Tổng thanh toán:</div>
-                        <div id="original-total-wrap" style="display: <?= $discount_amount > 0 ? 'block' : 'none' ?>; font-size: 0.8rem; text-decoration: line-through; color: var(--text-muted);">
+                        <div style="color: var(--text-secondary); font-size: 0.88rem; font-weight: 600;">TỔNG TIỀN THANH TOÁN:</div>
+                        <div id="original-total-wrap" style="display: <?= $discount_amount > 0 ? 'block' : 'none' ?>; font-size: 0.82rem; text-decoration: line-through; color: var(--text-muted); margin-top: 0.15rem;">
                             <?= format_currency($grand_total) ?>
                         </div>
                     </div>
-                    <span id="checkout-final-total" style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.02em;">
+                    <span id="checkout-final-total" style="font-size: 1.65rem; font-weight: 800; color: var(--status-live); letter-spacing: -0.02em;">
                         <?= format_currency($final_total) ?>
                     </span>
                 </div>
             </div>
 
             <!-- Gợi ý mã ưu đãi có sẵn cho người chấm thi -->
-            <div style="background: #fafafc; border: 1px dashed var(--border-subtle); border-radius: var(--radius-sm); padding: 1rem; font-size: 0.78rem; color: var(--text-secondary); line-height: 1.6;">
+            <div style="background: var(--bg-surface); border: 1px dashed var(--border-subtle); border-radius: var(--radius-sm); padding: 1rem; font-size: 0.78rem; color: var(--text-secondary); line-height: 1.6;">
                 <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">Gợi ý mã ưu đãi thử nghiệm:</div>
                 <div>• Nhập <strong>PTIT2026</strong>: Giảm ngay 10% tổng đơn hàng</div>
                 <div>• Nhập <strong>HAIDANG</strong>: Giảm ngay 15% độc quyền Studio</div>

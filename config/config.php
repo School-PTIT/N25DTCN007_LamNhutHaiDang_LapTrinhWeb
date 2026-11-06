@@ -25,6 +25,7 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
 define('APP_NAME', 'LÂM NHỰT HẢI ĐĂNG');
 define('APP_SUB_TITLE', 'HARDWARE ARCHITECTURE & GEAR LAB');
 define('APP_FOUNDER', 'Lâm Nhựt Hải Đăng');
+define('APP_STUDENT_NAME', 'Lâm Nhựt Hải Đăng');
 define('APP_STUDENT_ID', 'N25DTCN007');
 define('APP_HOTLINE', '1900 6868');
 define('APP_EMAIL', 'dang.ptit2026@gmail.com');
