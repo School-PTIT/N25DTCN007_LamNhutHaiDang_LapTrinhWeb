@@ -30,7 +30,7 @@ require_once __DIR__ . '/includes/header.php';
 
         <?php if (!empty($cart_items)): ?>
             <!-- Tiêu chí A8: Nút xóa giỏ hàng có hộp xác nhận (Hỗ trợ Ajax) -->
-            <form action="<?= BASE_URL ?>cart-update.php" method="POST" style="margin: 0;" class="cart-clear-form">
+            <form action="<?= BASE_URL ?>cart-update.php" method="POST" novalidate style="margin: 0;" class="cart-clear-form">
                 <?= csrf_field() ?>
                 <input type="hidden" name="action" value="clear">
                 <button type="submit" class="btn-icon btn-cart-clear-ajax" data-confirm="Bạn có chắc chắn muốn xóa tất cả sản phẩm khỏi giỏ hàng?" style="color: var(--status-alert);">
@@ -103,7 +103,7 @@ require_once __DIR__ . '/includes/header.php';
                                     </span>
                                 </td>
                                 <td style="text-align: center;">
-                                    <form action="<?= BASE_URL ?>cart-update.php" method="POST" style="margin: 0;" class="cart-remove-form">
+                                    <form action="<?= BASE_URL ?>cart-update.php" method="POST" novalidate style="margin: 0;" class="cart-remove-form">
                                         <?= csrf_field() ?>
                                         <input type="hidden" name="action" value="remove">
                                         <input type="hidden" name="product_id" value="<?= $item['id'] ?>">

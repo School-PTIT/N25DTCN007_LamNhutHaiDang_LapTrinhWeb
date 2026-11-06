@@ -4,7 +4,15 @@
  * Tiêu chí A7, A8, Ajax Add-to-cart, Stepper, Eye Toggle, Toast & Back-to-Top
  */
 
+// ============================================================================
+// KHỬ TRIỆT ĐỂ 100% BÓNG THOẠI / TOOLTIP MẶC ĐỊNH CỦA TRÌNH DUYỆT (HTML5 VALIDATION)
+// ============================================================================
+document.addEventListener('invalid', function (e) {
+  e.preventDefault();
+}, true);
+
 document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('form').forEach(f => f.setAttribute('novalidate', 'novalidate'));
 
   // ============================================================================
   // 0. HỆ THỐNG TOAST THÔNG BÁO NỔI SANG TRỌNG (FLOATING TOAST)
@@ -433,7 +441,25 @@ document.addEventListener('DOMContentLoaded', function () {
     const csrfInput = form ? form.querySelector('input[name="csrf_token"]') : null;
     const csrfToken = (csrfInput ? csrfInput.value : '') || window.CSRF_TOKEN || '';
     const qtyInput = form ? form.querySelector('input[name="quantity"]') : null;
-    const quantity = qtyInput ? Math.max(1, parseInt(qtyInput.value, 10) || 1) : 1;
+    let quantity = qtyInput ? parseInt(qtyInput.value, 10) : 1;
+    const maxStock = qtyInput ? parseInt(qtyInput.getAttribute('max') || qtyInput.getAttribute('data-stock') || '999', 10) : 999;
+    const minStock = qtyInput ? parseInt(qtyInput.getAttribute('min') || '1', 10) : 1;
+
+    // Kiểm tra và xử lý nếu người dùng gõ tay số lượng vượt quá tồn kho
+    if (isNaN(quantity) || quantity < minStock) {
+      quantity = minStock;
+      if (qtyInput) qtyInput.value = minStock;
+    } else if (quantity > maxStock) {
+      quantity = maxStock;
+      if (qtyInput) qtyInput.value = maxStock;
+      window.showAlertDialog({
+        title: 'Vượt quá số lượng tồn kho',
+        message: `Rất tiếc, kho hiện chỉ còn sẵn <strong>${maxStock}</strong> thiết bị. Hệ thống đã tự động giới hạn số lượng về mức tối đa sẵn có (${maxStock} chiếc).`,
+        buttonText: 'Đã hiểu',
+        type: 'warning'
+      });
+      return;
+    }
 
     // Tìm thẻ ảnh sản phẩm để kích hoạt hiệu ứng bay parabol vào giỏ hàng
     const card = btn.closest('.precision-card, .product-card, .detail-card, .product-item, .manifest-card, article');
@@ -544,13 +570,82 @@ document.addEventListener('DOMContentLoaded', function () {
       const input = stepper.querySelector('input.cart-qty-input');
       if (!input) return;
       let val = parseInt(input.value, 10) || 1;
-      const max = parseInt(input.getAttribute('max') || '999', 10);
+      const max = parseInt(input.getAttribute('max') || input.getAttribute('data-stock') || '999', 10);
       if (val < max) {
         input.value = val + 1;
         input.dispatchEvent(new Event('change', { bubbles: true }));
       } else {
-        window.showToast(`Số lượng tối đa trong kho là ${max} chiếc.`, 'warning');
+        window.showAlertDialog({
+          title: 'Đạt giới hạn tồn kho',
+          message: `Rất tiếc, kho hiện chỉ còn tối đa <strong>${max}</strong> thiết bị sẵn sàng xuất xưởng.`,
+          buttonText: 'Đã hiểu',
+          type: 'warning'
+        });
       }
+    }
+  });
+
+  // Lắng nghe sự kiện người dùng tự gõ số lượng vào bất kỳ ô nhập .cart-qty-input
+  document.addEventListener('change', function (e) {
+    if (e.target && e.target.classList.contains('cart-qty-input')) {
+      const input = e.target;
+      let val = parseInt(input.value, 10);
+      const max = parseInt(input.getAttribute('max') || input.getAttribute('data-stock') || '999', 10);
+      const min = parseInt(input.getAttribute('min') || '1', 10);
+
+      if (isNaN(val) || val < min) {
+        input.value = min;
+      } else if (val > max) {
+        input.value = max;
+        window.showAlertDialog({
+          title: 'Vượt quá số lượng tồn kho',
+          message: `Rất tiếc, kho hiện chỉ còn sẵn <strong>${max}</strong> thiết bị. Hệ thống đã tự động giới hạn số lượng về mức tối đa sẵn có (${max} chiếc).`,
+          buttonText: 'Đã hiểu',
+          type: 'warning'
+        });
+      }
+    }
+  });
+
+  // ============================================================================
+  // XỬ LÝ NÚT MUA NGAY (EXPRESS BUY) VÀ KIỂM TRA TỒN KHO BẰNG POPUP SANG TRỌNG
+  // ============================================================================
+  document.addEventListener('click', function (e) {
+    const expressBtn = e.target.closest('.btn-express-buy');
+    if (!expressBtn) return;
+
+    const form = expressBtn.closest('form');
+    if (!form) return;
+    const qtyInput = form.querySelector('input[name="quantity"]');
+    if (!qtyInput) return;
+
+    let quantity = parseInt(qtyInput.value, 10);
+    const maxStock = parseInt(qtyInput.getAttribute('max') || qtyInput.getAttribute('data-stock') || '999', 10);
+    const minStock = parseInt(qtyInput.getAttribute('min') || '1', 10);
+
+    if (isNaN(quantity) || quantity < minStock) {
+      e.preventDefault();
+      qtyInput.value = minStock;
+    } else if (quantity > maxStock) {
+      e.preventDefault();
+      qtyInput.value = maxStock;
+      window.showAlertDialog({
+        title: 'Vượt quá số lượng tồn kho',
+        message: `Thiết bị này hiện chỉ còn <strong>${maxStock}</strong> chiếc trong kho. Hệ thống đã tự động điều chỉnh số lượng về mức tối đa <strong>${maxStock}</strong> chiếc để bạn tiến hành mua ngay.`,
+        buttonText: 'Tiếp tục mua ngay',
+        type: 'warning',
+        onDismiss: () => {
+          let expInput = form.querySelector('input[name="express"]');
+          if (!expInput) {
+            expInput = document.createElement('input');
+            expInput.type = 'hidden';
+            expInput.name = 'express';
+            expInput.value = '1';
+            form.appendChild(expInput);
+          }
+          HTMLFormElement.prototype.submit.call(form);
+        }
+      });
     }
   });
 
@@ -577,9 +672,14 @@ document.addEventListener('DOMContentLoaded', function () {
           qty = 1;
           this.value = 1;
         } else if (qty > maxStock) {
-          window.showToast(`Kho chỉ còn ${maxStock} chiếc`, 'warning');
           qty = maxStock;
           this.value = maxStock;
+          window.showAlertDialog({
+            title: 'Vượt quá số lượng tồn kho',
+            message: `Rất tiếc, kho hiện chỉ còn <strong>${maxStock}</strong> thiết bị. Hệ thống đã tự động giới hạn số lượng về mức tối đa sẵn có (${maxStock} chiếc).`,
+            buttonText: 'Đã hiểu',
+            type: 'warning'
+          });
         }
 
         // Tính lại dòng con

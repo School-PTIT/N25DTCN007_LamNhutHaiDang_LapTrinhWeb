@@ -103,7 +103,7 @@ require_once __DIR__ . '/includes/header.php';
 
             <!-- Form Thêm Giỏ Hàng & Mua Ngay -->
             <?php if ($product['stock'] > 0): ?>
-                <form action="<?= BASE_URL ?>cart-add.php" method="POST" style="margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;">
+                <form action="<?= BASE_URL ?>cart-add.php" method="POST" novalidate style="margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;">
                     <?= csrf_field() ?>
                     <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
                     
@@ -111,7 +111,7 @@ require_once __DIR__ . '/includes/header.php';
                         <span>Số lượng:</span>
                         <div class="qty-stepper">
                             <button type="button" class="qty-btn qty-btn-minus" title="Giảm số lượng">-</button>
-                            <input type="number" id="qty-input" name="quantity" value="1" min="1" max="<?= $product['stock'] ?>" class="cart-qty-input" data-stock="<?= $product['stock'] ?>">
+                            <input type="number" id="qty-input" name="quantity" value="1" min="1" max="<?= $product['stock'] ?>" class="cart-qty-input" data-stock="<?= $product['stock'] ?>" autocomplete="off">
                             <button type="button" class="qty-btn qty-btn-plus" title="Tăng số lượng">+</button>
                         </div>
                     </div>

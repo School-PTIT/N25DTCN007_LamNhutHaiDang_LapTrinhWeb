@@ -11,6 +11,7 @@ FTP_PASS = "xununam449977"
 files_to_upload = [
     ("index.php", "htdocs/index.php"),
     ("product.php", "htdocs/product.php"),
+    ("cart.php", "htdocs/cart.php"),
     ("cart-add.php", "htdocs/cart-add.php"),
     ("cart-update.php", "htdocs/cart-update.php"),
     ("config/db.php", "htdocs/config/db.php"),
