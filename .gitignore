@@ -2,6 +2,10 @@
 cookie.txt
 cookie_cust.txt
 
+# Python cache
+__pycache__/
+*.pyc
+
 # OS generated files
 Thumbs.db
 ehthumbs.db
