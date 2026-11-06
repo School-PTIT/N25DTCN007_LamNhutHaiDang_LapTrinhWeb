@@ -160,8 +160,9 @@ require_once __DIR__ . '/includes/header.php';
         </div>
     <?php else: ?>
         <div class="product-grid">
+            <?php $card_idx = 0; ?>
             <?php foreach ($products as $prod): ?>
-                <article class="precision-card">
+                <article class="precision-card" style="--stagger: <?= $card_idx ?>;">
                     <!-- Top Metadata -->
                     <div class="card-top-meta">
                         <span class="sku-badge"><?= e($prod['sku']) ?></span>
@@ -226,6 +227,7 @@ require_once __DIR__ . '/includes/header.php';
                         </div>
                     </div>
                 </article>
+            <?php $card_idx++; ?>
             <?php endforeach; ?>
         </div>
 

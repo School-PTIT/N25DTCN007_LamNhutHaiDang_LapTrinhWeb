@@ -47,16 +47,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 3200);
   };
 
-  // Cập nhật số đếm giỏ hàng trên Header với hiệu ứng nhịp tim
+  // Cập nhật số đếm giỏ hàng trên Header với hiệu ứng nhịp tim & nảy giỏ (Micro-Bump)
   window.updateHeaderCartCount = function (count) {
     const headerCartEl = document.getElementById('header-cart-count');
     if (headerCartEl) {
       headerCartEl.textContent = count;
-      headerCartEl.style.transform = 'scale(1.35)';
-      headerCartEl.style.transition = 'transform 180ms ease';
-      setTimeout(() => {
-        headerCartEl.style.transform = 'scale(1)';
-      }, 200);
+      const cartPill = headerCartEl.closest('.cart-pill');
+      if (cartPill) {
+        cartPill.classList.remove('bump');
+        void cartPill.offsetWidth; // Trigger reflow for animation restart
+        cartPill.classList.add('bump');
+        setTimeout(() => cartPill.classList.remove('bump'), 350);
+      }
     }
   };
 

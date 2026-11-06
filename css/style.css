@@ -49,6 +49,12 @@
   --radius-lg: 20px;
   --radius-full: 9999px;
   --transition-smooth: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  /* Motion Tokens (Quiet Luxury Physics) */
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --duration-instant: 120ms;
+  --duration-fast: 200ms;
+  --duration-moderate: 350ms;
 }
 
 /* Base Reset & Anti-Overflow */
@@ -189,6 +195,7 @@ img {
   background-color: var(--status-live);
   border: 2px solid #ffffff;
   border-radius: 50%;
+  animation: livePulse 2.4s infinite ease-out;
 }
 
 .founder-text {
@@ -495,9 +502,12 @@ img {
   position: relative;
   display: flex;
   flex-direction: column;
-  transition: var(--transition-smooth);
+  transition: transform 240ms var(--ease-spring), box-shadow 240ms var(--ease-spring), border-color 240ms var(--ease-spring);
   box-shadow: var(--shadow-card);
   overflow: hidden;
+  animation: cardEntrance 380ms var(--ease-spring) both;
+  animation-delay: calc(var(--stagger, 0) * 40ms);
+  will-change: transform;
 }
 
 .precision-card:hover {
@@ -1561,3 +1571,70 @@ img {
 }
 
 
+
+
+/* Tactile Micro-Interactions (Emil Kowalski Physics) */
+.btn-action-primary:active,
+.btn-icon:active,
+.cat-pill:active,
+.nav-link:active,
+.cart-pill:active {
+  transform: scale(0.97) !important;
+  transition: transform var(--duration-instant) var(--ease-spring) !important;
+}
+
+@keyframes livePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(5, 150, 105, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(5, 150, 105, 0);
+  }
+}
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cartBump {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.18); }
+  65% { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+@keyframes toastSpring {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.cart-pill.bump {
+  animation: cartBump 320ms var(--ease-spring);
+}
+
+
+/* Accessibility: Respect Reduced Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
