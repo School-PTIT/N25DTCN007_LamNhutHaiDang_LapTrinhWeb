@@ -1,0 +1,15 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' width='400' height='300'>
+  <defs>
+    <linearGradient id='cardBg_lap' x1='0%' y1='0%' x2='0%' y2='100%'>
+      <stop offset='0%' stop-color='#ffffff'/>
+      <stop offset='100%' stop-color='#f5f6f8'/>
+    </linearGradient>
+  </defs>
+  <rect width='400' height='300' fill='url(#cardBg_lap)'/>
+  <circle cx='200' cy='125' r='65' fill='#059669' opacity='0.06'/>
+  <rect x='130' y='80' width='140' height='90' rx='12' fill='#ffffff' stroke='#e2e8f0' stroke-width='1.5'/>
+  <rect x='145' y='95' width='110' height='60' rx='8' fill='none' stroke='#059669' stroke-width='1.5' stroke-dasharray='4,4'/>
+  <circle cx='200' cy='125' r='16' fill='#059669' opacity='0.15'/>
+  <text x='200' y='210' font-family='sans-serif' font-size='14' font-weight='700' fill='#0f172a' text-anchor='middle' letter-spacing='0.5'>RAZER BLADE 16</text>
+  <text x='200' y='232' font-family='sans-serif' font-size='11' font-weight='500' fill='#64748b' text-anchor='middle'>i9-14900HX · RTX 4080 · OLED</text>
+</svg>

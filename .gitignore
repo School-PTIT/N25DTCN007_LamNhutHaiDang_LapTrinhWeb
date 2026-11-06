@@ -1,0 +1,15 @@
+# Temporary test cookies
+cookie.txt
+cookie_cust.txt
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Editor / IDE / Agent metadata
+.vscode/
+.idea/
+.agents/

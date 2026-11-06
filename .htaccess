@@ -1,0 +1,26 @@
+# ==============================================================================
+# BẢO VỆ THƯ MỤC & CẤU HÌNH GỐC (TIÊU CHÍ D5)
+# Sinh viên: Lâm Nhựt Hải Đăng - MSSV: N25DTCN007
+# ==============================================================================
+
+# Chặn trực tiếp truy cập vào các thư mục nhạy cảm
+RewriteEngine On
+
+RewriteRule ^config/ - [F,L]
+RewriteRule ^includes/ - [F,L]
+RewriteRule ^database/ - [F,L]
+
+# Trang báo lỗi 404 riêng (Tiêu chí D5)
+ErrorDocument 404 /404.php
+ErrorDocument 403 /404.php
+
+# Bảo vệ các tệp ẩn và tệp cấu hình
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "(composer\.json|package\.json|schema\.sql|\.env|\.sqlite|\.sqlite3|\.db)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
