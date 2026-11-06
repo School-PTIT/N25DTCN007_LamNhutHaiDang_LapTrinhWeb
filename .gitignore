@@ -17,3 +17,6 @@ $RECYCLE.BIN/
 .vscode/
 .idea/
 .agents/
+
+# Local submission staging folder (already tracked via root zip & docx/pdf)
+NOP_BAI_*/
