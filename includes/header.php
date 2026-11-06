@@ -14,7 +14,7 @@ $flash = get_flash();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= isset($page_title) ? e($page_title) . ' — ' : '' ?><?= e(APP_NAME) ?> // <?= e(APP_SUB_TITLE) ?></title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>css/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/style.css?v=2.1">
     <script>window.BASE_URL = '<?= BASE_URL ?>'; window.CSRF_TOKEN = '<?= csrf_token() ?>';</script>
 </head>
 <body>
