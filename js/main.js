@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   // ============================================================================
-  // LUXURY AUDIO SYNTHESIS: TING BELL (Apple Pay / Web Audio API 880Hz + 1760Hz)
+  // LUXURY ACOUSTIC RESONANCE: CRYSTAL CHIME (Apple Pay Triad Harmonics C6-E7-G6-C7)
   // ============================================================================
   let audioCtx = null;
   function getAudioContext() {
@@ -85,38 +85,59 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!ctx) return;
       const now = ctx.currentTime;
 
-      // Harmonic 1 (Fundamental tone: 880Hz - A5)
+      // 1. Crystal Fundamental Strike (C6 - 1046.5Hz)
       const osc1 = ctx.createOscillator();
       const gain1 = ctx.createGain();
       osc1.type = 'sine';
-      osc1.frequency.setValueAtTime(880, now);
-      osc1.frequency.exponentialRampToValueAtTime(1760, now + 0.08);
-      gain1.gain.setValueAtTime(0.28, now);
-      gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+      osc1.frequency.setValueAtTime(1046.5, now);
+      gain1.gain.setValueAtTime(0.001, now);
+      gain1.gain.linearRampToValueAtTime(0.35, now + 0.004);
+      gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.58);
       osc1.connect(gain1);
       gain1.connect(ctx.destination);
 
-      // Harmonic 2 (Sparkle overtone: 1760Hz - A6)
+      // 2. High Shimmer Overtone (C7 - 2093Hz) - Metallic sheen
       const osc2 = ctx.createOscillator();
       const gain2 = ctx.createGain();
-      osc2.type = 'sine';
-      osc2.frequency.setValueAtTime(1760, now);
-      gain2.gain.setValueAtTime(0.14, now);
-      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(2093, now);
+      gain2.gain.setValueAtTime(0.001, now);
+      gain2.gain.linearRampToValueAtTime(0.18, now + 0.003);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.42);
       osc2.connect(gain2);
       gain2.connect(ctx.destination);
 
-      osc1.start(now);
-      osc2.start(now);
-      osc1.stop(now + 0.46);
-      osc2.stop(now + 0.36);
+      // 3. Golden Fifth Harmonic (G6 - 1567.98Hz)
+      const osc3 = ctx.createOscillator();
+      const gain3 = ctx.createGain();
+      osc3.type = 'sine';
+      osc3.frequency.setValueAtTime(1567.98, now);
+      gain3.gain.setValueAtTime(0.001, now);
+      gain3.gain.linearRampToValueAtTime(0.14, now + 0.005);
+      gain3.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
+      osc3.connect(gain3);
+      gain3.connect(ctx.destination);
+
+      // 4. Sparkle Sheen (E7 - 2637Hz)
+      const osc4 = ctx.createOscillator();
+      const gain4 = ctx.createGain();
+      osc4.type = 'sine';
+      osc4.frequency.setValueAtTime(2637, now);
+      gain4.gain.setValueAtTime(0.001, now);
+      gain4.gain.linearRampToValueAtTime(0.09, now + 0.003);
+      gain4.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+      osc4.connect(gain4);
+      gain4.connect(ctx.destination);
+
+      osc1.start(now); osc2.start(now); osc3.start(now); osc4.start(now);
+      osc1.stop(now + 0.60); osc2.stop(now + 0.44); osc3.stop(now + 0.34); osc4.stop(now + 0.24);
     } catch (e) {
       // AudioContext policy restrictions
     }
   };
 
   // ============================================================================
-  // PARABOLIC FLY-TO-CART ANIMATION
+  // TRUE BALLISTIC PARABOLIC ARC FLY-TO-CART (KINEMATIC PROJECTILE PHYSICS)
   // ============================================================================
   window.animateFlyToCart = function (imgElement, onArrival) {
     const cartPill = document.querySelector('.cart-pill');
@@ -133,42 +154,89 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    // Tạo bản sao ảnh thu nhỏ để bay
-    const flyingImg = document.createElement('img');
-    flyingImg.src = imgElement.currentSrc || imgElement.src;
-    flyingImg.className = 'flying-product-img';
-    flyingImg.style.width = `${imgRect.width}px`;
-    flyingImg.style.height = `${imgRect.height}px`;
-    flyingImg.style.top = `${imgRect.top}px`;
-    flyingImg.style.left = `${imgRect.left}px`;
-    flyingImg.style.opacity = '0.9';
-    document.body.appendChild(flyingImg);
+    // 1. Phản hồi nhấc ảnh vật lý tại thẻ gốc (Lift Pulse)
+    imgElement.classList.remove('card-img-lift');
+    void imgElement.offsetWidth;
+    imgElement.classList.add('card-img-lift');
+    setTimeout(() => imgElement.classList.remove('card-img-lift'), 400);
 
-    // Kích hoạt đường bay parabol lướt vào giỏ hàng
-    requestAnimationFrame(() => {
-      const targetX = cartRect.left + (cartRect.width / 2) - 16;
-      const targetY = cartRect.top + (cartRect.height / 2) - 16;
-      flyingImg.style.transform = `translate3d(${targetX - imgRect.left}px, ${targetY - imgRect.top}px, 0) scale(0.18) rotate(15deg)`;
-      flyingImg.style.opacity = '0.2';
-    });
+    // 2. Tạo đồng xu thiết bị thu nhỏ (Glossy Product Token)
+    const token = document.createElement('div');
+    token.className = 'flying-cart-token';
+    const innerImg = document.createElement('img');
+    innerImg.src = imgElement.currentSrc || imgElement.src;
+    token.appendChild(innerImg);
+    document.body.appendChild(token);
 
-    setTimeout(() => {
-      if (flyingImg.parentNode) {
-        flyingImg.parentNode.removeChild(flyingImg);
+    // Tọa độ tâm điểm
+    const x0 = imgRect.left + (imgRect.width / 2);
+    const y0 = imgRect.top + (imgRect.height / 2);
+    const x1 = cartRect.left + (cartRect.width / 2);
+    const y1 = cartRect.top + (cartRect.height / 2);
+
+    const dx = x1 - x0;
+    const dy = y1 - y0;
+
+    // Chiều cao đỉnh vòm cung Parabol (Peak Arc) tính theo khoảng cách
+    const arcHeight = Math.max(90, Math.min(220, Math.abs(dx) * 0.24 + 60));
+
+    const flightDuration = 540; // 540ms tốc độ mắt người bắt chuyển động tự nhiên
+    const startTime = performance.now();
+
+    function stepFlight(now) {
+      const elapsed = now - startTime;
+      const t = Math.min(1, elapsed / flightDuration);
+
+      // Easing mượt mà cho trục X (nhanh dần rồi êm lại khi tiếp cận giỏ)
+      const ex = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+      // Phương trình quỹ đạo Parabol chuẩn vật lý: y(t) = y0 + dy*t - 4*H*t*(1-t)
+      const currentX = x0 + dx * ex - 32;
+      const currentY = y0 + dy * t - (4 * arcHeight * t * (1 - t)) - 32;
+
+      // Thu nhỏ dần và hút xoáy vào miệng giỏ hàng
+      const currentScale = 1.0 - (0.65 * t) - (0.30 * Math.pow(t, 3));
+      const currentRot = -5 + (30 * t); // Nghiêng tự nhiên theo hướng vung tay ném
+      const currentOpacity = t > 0.88 ? (1 - t) / 0.12 : 1.0;
+
+      token.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) scale(${Math.max(0.05, currentScale)}) rotate(${currentRot}deg)`;
+      token.style.opacity = currentOpacity;
+
+      if (t < 1) {
+        requestAnimationFrame(stepFlight);
+      } else {
+        // Hoàn tất chuyến bay: Hủy token
+        if (token.parentNode) {
+          token.parentNode.removeChild(token);
+        }
+
+        // 3. Phản hồi hấp thụ lực tại Giỏ Hàng (Momentum Catch Reaction)
+        cartPill.classList.remove('cart-catch', 'ting-ring');
+        void cartPill.offsetWidth;
+        cartPill.classList.add('cart-catch', 'ting-ring');
+        setTimeout(() => cartPill.classList.remove('cart-catch', 'ting-ring'), 750);
+
+        // 4. Bật thẻ huy hiệu nổi "+1" bay lên trên giỏ hàng
+        const plusBadge = document.createElement('span');
+        plusBadge.className = 'cart-floating-plus';
+        plusBadge.textContent = '+1';
+        cartPill.appendChild(plusBadge);
+        setTimeout(() => {
+          if (plusBadge.parentNode) {
+            plusBadge.parentNode.removeChild(plusBadge);
+          }
+        }, 750);
+
+        // 5. Ngân vang chuông tinh thể Apple Pay
+        window.playLuxuryChime();
+
+        if (onArrival) {
+          onArrival();
+        }
       }
-      // Giỏ hàng nảy lên & lan tỏa vòng hào quang
-      cartPill.classList.remove('ting-ring');
-      void cartPill.offsetWidth;
-      cartPill.classList.add('ting-ring');
-      setTimeout(() => cartPill.classList.remove('ting-ring'), 750);
+    }
 
-      // Kích hoạt âm thanh ting
-      window.playLuxuryChime();
-
-      if (onArrival) {
-        onArrival();
-      }
-    }, 580);
+    requestAnimationFrame(stepFlight);
   };
 
   // ============================================================================
@@ -212,9 +280,9 @@ document.addEventListener('DOMContentLoaded', function () {
       window.animateFlyToCart(img);
     }
 
-    // Trạng thái loading nhẹ
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '...';
+    // Trạng thái rung nhịp haptic và spinner vi mô
+    const originalHtml = btn.innerHTML;
+    btn.innerHTML = '<span class="btn-spinner"></span> Đang thêm';
     btn.disabled = true;
 
     fetch(`${window.BASE_URL || ''}cart-add.php`, {
@@ -224,19 +292,26 @@ document.addEventListener('DOMContentLoaded', function () {
     })
       .then(res => res.json())
       .then(data => {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
         if (data.success) {
+          btn.innerHTML = '<svg class="svg-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Đã thêm!';
+          btn.classList.add('btn-added-success');
           window.showToast(`Đã thêm <strong>${productName}</strong> vào giỏ!`, 'success');
           if (typeof data.cart_count !== 'undefined') {
             window.updateHeaderCartCount(data.cart_count);
           }
+          setTimeout(() => {
+            btn.innerHTML = originalHtml;
+            btn.classList.remove('btn-added-success');
+            btn.disabled = false;
+          }, 950);
         } else {
+          btn.innerHTML = originalHtml;
+          btn.disabled = false;
           window.showToast(data.message || 'Không thể thêm sản phẩm.', 'warning');
         }
       })
       .catch(err => {
-        btn.innerHTML = originalText;
+        btn.innerHTML = originalHtml;
         btn.disabled = false;
         console.error('Lỗi thêm giỏ hàng:', err);
         window.showToast('Lỗi kết nối máy chủ.', 'error');

@@ -10,14 +10,9 @@ FTP_PASS = "xununam449977"
 
 files_to_upload = [
     ("css/style.css", "htdocs/css/style.css"),
+    ("js/main.js", "htdocs/js/main.js"),
     ("includes/header.php", "htdocs/includes/header.php"),
-    ("login.php", "htdocs/login.php"),
-    ("product.php", "htdocs/product.php"),
-    ("admin/index.php", "htdocs/admin/index.php"),
-    ("admin/categories.php", "htdocs/admin/categories.php"),
-    ("admin/orders.php", "htdocs/admin/orders.php"),
-    ("admin/products.php", "htdocs/admin/products.php"),
-    ("admin/product-form.php", "htdocs/admin/product-form.php"),
+    ("includes/footer.php", "htdocs/includes/footer.php"),
 ]
 
 print("Connecting to FTP...")
@@ -32,4 +27,4 @@ for local_path, remote_path in files_to_upload:
     print(f"[OK] Uploaded {remote_path}")
 
 ftp.quit()
-print("\nAll files successfully deployed to hosting https://n25dtcn007-haidang.rf.gd/ !")
+print("\nAll realistic motion files successfully deployed to hosting https://n25dtcn007-haidang.rf.gd/ !")
