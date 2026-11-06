@@ -487,33 +487,13 @@ document.addEventListener('DOMContentLoaded', function () {
             window.updateHeaderCartCount(data.cart_count);
           }
 
-          // Hiển thị Popup Modal sang trọng sau khi đồng xu bay vào giỏ hàng (540ms)
-          const popupDelay = img ? 560 : 80;
-          setTimeout(() => {
-            if (data.type === 'warning') {
-              window.showConfirmDialog({
-                title: 'Đã điều chỉnh số lượng tối đa',
-                message: data.message || `Kho đã đạt giới hạn tồn kho cho <strong>${productName}</strong>.`,
-                confirmText: 'Xem giỏ hàng',
-                cancelText: 'Tiếp tục mua sắm',
-                type: 'warning',
-                onConfirm: () => {
-                  window.location.href = `${window.BASE_URL || ''}cart.php`;
-                }
-              });
-            } else {
-              window.showConfirmDialog({
-                title: 'Đã thêm vào giỏ hàng!',
-                message: `Thiết bị <strong>${productName}</strong> (Số lượng: <strong>${quantity}</strong>) đã được thêm vào giỏ hàng của bạn. Hiện giỏ hàng đang có <strong>${data.cart_count || 1}</strong> sản phẩm.`,
-                confirmText: 'Xem giỏ hàng ngay',
-                cancelText: 'Tiếp tục mua sắm',
-                type: 'success',
-                onConfirm: () => {
-                  window.location.href = `${window.BASE_URL || ''}cart.php`;
-                }
-              });
-            }
-          }, popupDelay);
+          // Thông báo nổi không cản trở người dùng (Zero-Friction Toast Notification)
+          if (data.type === 'warning') {
+            window.showToast(data.message || `Đã điều chỉnh về tối đa tồn kho cho <strong>${productName}</strong>.`, 'warning');
+          } else {
+            const qtyText = quantity > 1 ? `${quantity}x ` : '';
+            window.showToast(`Đã thêm <strong>${qtyText}${productName}</strong> vào giỏ hàng!`, 'success');
+          }
 
           setTimeout(() => {
             btn.innerHTML = originalHtml;
@@ -523,12 +503,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
           btn.innerHTML = originalHtml;
           btn.disabled = false;
-          window.showAlertDialog({
-            title: 'Không thể thêm vào giỏ',
-            message: data.message || 'Không thể thêm sản phẩm này vào giỏ hàng.',
-            buttonText: 'Đã hiểu',
-            type: 'warning'
-          });
+          window.showToast(data.message || 'Không thể thêm sản phẩm này vào giỏ hàng.', 'warning');
         }
       })
       .catch(err => {

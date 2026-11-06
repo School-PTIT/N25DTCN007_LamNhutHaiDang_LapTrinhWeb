@@ -20,44 +20,49 @@ def run_tests():
         page.on("pageerror", lambda err: print(f"PAGE ERROR: {err}"))
         page.on("response", lambda res: print(f"HTTP {res.status}: {res.url}") if res.status >= 400 or "cart" in res.url else None)
 
-        print("1. Opening Home Page and adding 2 items to cart...")
+        print("1. Opening Home Page and adding 2 items to cart smoothly...")
         page.goto(f"{BASE_URL}/index.php", wait_until="networkidle")
         
         add_btns = page.locator(".btn-add-cart-ajax")
         assert add_btns.count() >= 2, "Need at least 2 products on index.php"
         
         modal_backdrop = page.locator("#studio-modal-backdrop")
-        cancel_btn = page.locator("#studio-modal-btn-cancel")
         confirm_btn = page.locator("#studio-modal-btn-confirm")
 
+        # Click item 1
         add_btns.nth(0).click()
-        page.wait_for_timeout(750)
-        assert "active" in (modal_backdrop.get_attribute("class") or ""), "Add to cart modal did not open on 1st item!"
-        page.screenshot(path=os.path.join(ARTIFACT_DIR, "verified_add_to_cart_popup_home.png"))
-        cancel_btn.click() # Click 'Tiếp tục mua sắm'
-        page.wait_for_timeout(250)
+        page.wait_for_timeout(450)
+        # Verify NO modal is active or even present (zero obstruction!)
+        modal_count = page.locator("#studio-modal-backdrop.active").count()
+        assert modal_count == 0, "Modal should NOT block user on add-to-cart!"
+        # Verify toast notification is displayed
+        toast = page.locator(".toast-message.show").last
+        assert toast.is_visible(), "Toast notification should be visible on add-to-cart!"
+        print(f"   -> Toast message on Home: '{toast.inner_text().strip()}'")
+        page.screenshot(path=os.path.join(ARTIFACT_DIR, "verified_add_to_cart_toast_home.png"))
 
+        # Click item 2 directly without needing to dismiss any popup!
         add_btns.nth(1).click()
-        page.wait_for_timeout(750)
-        assert "active" in (modal_backdrop.get_attribute("class") or ""), "Add to cart modal did not open on 2nd item!"
-        cancel_btn.click() # Click 'Tiếp tục mua sắm'
-        page.wait_for_timeout(250)
+        page.wait_for_timeout(450)
+        assert page.locator("#studio-modal-backdrop.active").count() == 0, "Modal should NOT block user on 2nd item!"
 
         cart_badge = page.locator("#header-cart-count").inner_text().strip()
-        print(f"   -> Header cart count after adding 2 products via Popup: {cart_badge}")
+        print(f"   -> Header cart count after adding 2 products: {cart_badge}")
         assert int(cart_badge) >= 2, f"Expected cart count >= 2, got {cart_badge}"
 
-        print("1.5 Testing Add to Cart Popup on Product Detail Page (product.php)...")
+        print("1.5 Testing Add to Cart on Product Detail Page (product.php)...")
         page.goto(f"{BASE_URL}/product.php?id=1", wait_until="networkidle")
         detail_add_btn = page.locator(".btn-add-cart-ajax").first
         detail_add_btn.click()
-        page.wait_for_timeout(750)
-        assert "active" in (modal_backdrop.get_attribute("class") or ""), "Add to cart modal did not open on product.php!"
-        page.screenshot(path=os.path.join(ARTIFACT_DIR, "verified_add_to_cart_popup_detail.png"))
-        confirm_btn.click() # Click 'Xem giỏ hàng ngay' -> should navigate to cart.php!
-        page.wait_for_load_state("networkidle")
-        assert "cart.php" in page.url, f"Expected redirect to cart.php when clicking Xem giỏ hàng ngay, got {page.url}"
-        print("   -> Product Detail Add-to-Cart Popup & 'Xem giỏ hàng ngay' navigation: PASS")
+        page.wait_for_timeout(450)
+        assert page.locator("#studio-modal-backdrop.active").count() == 0, "Modal should NOT block user on product.php!"
+        detail_toast = page.locator(".toast-message.show").last
+        assert detail_toast.is_visible(), "Toast should be visible on product.php add-to-cart!"
+        print(f"   -> Product Detail Toast message: '{detail_toast.inner_text().strip()}'")
+        page.screenshot(path=os.path.join(ARTIFACT_DIR, "verified_add_to_cart_toast_detail.png"))
+
+        # Navigate to cart.php
+        page.goto(f"{BASE_URL}/cart.php", wait_until="networkidle")
 
         print("2. Testing Single Item Remove on cart.php...")
         rows_before = page.locator("tr[id^='cart-row-']").count()
