@@ -30,13 +30,29 @@ define('APP_HOTLINE', '1900 6868');
 define('APP_EMAIL', 'dang.ptit2026@gmail.com');
 define('APP_ADDRESS', 'Học viện Công nghệ Bưu chính Viễn thông, TP. Hồ Chí Minh');
 
-// Cấu hình Cơ sở dữ liệu MySQL (Tương thích chuẩn Laragon & XAMPP)
-define('DB_HOST', '127.0.0.1');
-define('DB_PORT', '3306');
-define('DB_NAME', 'final_web');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_CHARSET', 'utf8mb4');
+// Cấu hình Cơ sở dữ liệu MySQL (Tự động thích ứng giữa Cục bộ và Hosting InfinityFree)
+$is_hosting = (
+    (isset($_SERVER['HTTP_HOST']) && (
+        strpos($_SERVER['HTTP_HOST'], 'rf.gd') !== false ||
+        strpos($_SERVER['HTTP_HOST'], 'infinityfree') !== false
+    ))
+);
+
+if ($is_hosting) {
+    define('DB_HOST', 'sql107.infinityfree.com');
+    define('DB_PORT', '3306');
+    define('DB_NAME', 'if0_43372666_shop');
+    define('DB_USER', 'if0_43372666');
+    define('DB_PASS', 'xununam449977');
+    define('DB_CHARSET', 'utf8mb4');
+} else {
+    define('DB_HOST', '127.0.0.1');
+    define('DB_PORT', '3306');
+    define('DB_NAME', 'final_web');
+    define('DB_USER', 'root');
+    define('DB_PASS', '');
+    define('DB_CHARSET', 'utf8mb4');
+}
 
 // Tự động nhận diện BASE_URL linh hoạt (chạy tốt trên cả Laragon, XAMPP, PHP Built-in Server và Hosting thật)
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';

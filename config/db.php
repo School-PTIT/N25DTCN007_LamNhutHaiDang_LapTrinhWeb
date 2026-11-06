@@ -19,7 +19,7 @@ function get_db_connection() {
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_EMULATE_PREPARES   => false,
-                PDO::ATTR_TIMEOUT            => 1 // Timeout 1s để không treo nếu MySQL chưa bật
+                PDO::ATTR_TIMEOUT            => 5 // Timeout 5s để đảm bảo kết nối ổn định trên hosting
             ];
             $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
         } catch (Throwable $e) {
