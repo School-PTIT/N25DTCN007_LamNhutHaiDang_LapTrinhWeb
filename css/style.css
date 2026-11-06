@@ -2584,3 +2584,135 @@ html[data-theme="dark"] .studio-modal-btn-confirm.studio-modal-btn-success {
   color: #0a0e17;
   font-weight: 700;
 }
+
+
+/* ==============================================================================
+   IMPECCABLE UI CRAFT (ANTI-SLOP, TABULAR NUMS & SUB-200MS TACTILE PHYSICS)
+   Boutique Design Polish for PTIT Web Project 2026
+   ============================================================================== */
+
+/* 1. Tabular Numbers (Zero-Jitter Figure Metrics) */
+.cart-counter,
+#header-cart-count,
+.card-price,
+.product-price,
+.product-detail-price,
+.cart-subtotal,
+#cart-grand-total,
+.cart-qty-input,
+.qty-input,
+.quantity-input,
+.checkout-item-price,
+.checkout-subtotal,
+.checkout-grand-total,
+#vietqr-total-display,
+#checkout-btn-total,
+#voucher-amount-display,
+.order-table td,
+.order-total,
+.order-detail-table td,
+.spec-sheet td:last-child,
+.tabular-nums {
+  font-variant-numeric: tabular-nums !important;
+  -webkit-font-feature-settings: "tnum" 1 !important;
+  font-feature-settings: "tnum" 1 !important;
+}
+
+/* 2. Touch Targets & Ergonomic Spatial Rhythm (8px Grid Alignment) */
+.nav-link {
+  min-height: 38px;
+  padding: 0.5rem 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cat-pill {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 1.15rem;
+}
+
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 2px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-subtle);
+}
+
+.qty-btn {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.cart-qty-input,
+.qty-input {
+  min-width: 44px;
+  height: 38px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+/* 3. Sub-200ms Tactile Physics (Linear / Apple Micro-Interactions) */
+.btn,
+.btn-action-primary,
+.btn-add-cart-ajax,
+.cat-pill,
+.qty-btn,
+.theme-toggle-btn,
+.cart-pill,
+.studio-modal-btn {
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 160ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 160ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 160ms cubic-bezier(0.22, 1, 0.36, 1),
+              color 160ms cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.btn:active:not(:disabled),
+.btn-action-primary:active,
+.btn-add-cart-ajax:active,
+.cat-pill:active,
+.qty-btn:active:not(:disabled),
+.theme-toggle-btn:active,
+.cart-pill:active,
+.studio-modal-btn:active {
+  transform: scale(0.96) !important;
+}
+
+/* 4. Optical Alignment & Sub-Pixel Anti-Jitter */
+.btn-action-primary svg,
+.btn-add-cart-ajax svg,
+.nav-link svg,
+.cat-pill svg,
+.cart-pill svg {
+  flex-shrink: 0;
+  vertical-align: -0.125em;
+}
+
+/* 5. Anti-Overflow Safety Locks */
+.founder-brand,
+.main-nav,
+.header-actions,
+.product-card,
+.cart-table-wrapper,
+.checkout-col-left,
+.checkout-col-right {
+  min-width: 0;
+}
