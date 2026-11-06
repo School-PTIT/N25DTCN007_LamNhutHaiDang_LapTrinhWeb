@@ -86,8 +86,8 @@ require_once __DIR__ . '/includes/header.php';
             <div style="margin-bottom: 1.5rem; font-size: 0.88rem; font-weight: 500;">
                 Tình trạng kho: 
                 <?php if ($product['stock'] > 0): ?>
-                    <span style="color: var(--status-live); font-weight: 600;">
-                        ● Sẵn hàng (Còn <?= $product['stock'] ?> chiếc)
+                    <span style="color: var(--status-live); font-weight: 600; display: inline-flex; align-items: center; gap: 0.45rem;">
+                        <span class="status-indicator-dot dot-ready"></span> Sẵn hàng (Còn <?= $product['stock'] ?> chiếc)
                     </span>
                 <?php else: ?>
                     <span style="color: var(--status-alert); font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem;">
@@ -172,7 +172,7 @@ require_once __DIR__ . '/includes/header.php';
                     <article class="precision-card">
                         <div class="card-top-meta">
                             <span class="sku-badge"><?= e($rel['sku']) ?></span>
-                            <span class="stock-tag ready">● Còn <?= $rel['stock'] ?></span>
+                            <span class="stock-tag ready"><span class="status-indicator-dot dot-ready"></span> Còn <?= $rel['stock'] ?></span>
                         </div>
                         <a href="<?= BASE_URL ?>product.php?id=<?= $rel['id'] ?>" class="card-img-wrap">
                             <img src="<?= BASE_URL ?>uploads/<?= e($rel['image']) ?>" alt="<?= e($rel['name']) ?>" style="max-height: 130px;">

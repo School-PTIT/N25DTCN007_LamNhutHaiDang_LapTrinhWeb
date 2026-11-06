@@ -168,11 +168,11 @@ require_once __DIR__ . '/includes/header.php';
                         <span class="sku-badge"><?= e($prod['sku']) ?></span>
                         <?php if ($prod['stock'] <= 3): ?>
                             <span class="stock-tag low" title="Sắp hết hàng">
-                                ● Còn <?= $prod['stock'] ?> chiếc
+                                <span class="status-indicator-dot dot-warning"></span> Còn <?= $prod['stock'] ?> chiếc
                             </span>
                         <?php else: ?>
                             <span class="stock-tag ready">
-                                ● Sẵn hàng
+                                <span class="status-indicator-dot dot-ready"></span> Sẵn hàng
                             </span>
                         <?php endif; ?>
                     </div>

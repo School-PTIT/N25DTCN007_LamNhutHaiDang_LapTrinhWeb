@@ -112,11 +112,11 @@ require_once __DIR__ . '/includes/header.php';
                     <div class="stepper-label">Đã đặt hàng</div>
                 </div>
                 <div class="stepper-item <?= in_array($order['status'], ['pending', 'shipping', 'completed']) ? ($order['status'] === 'pending' ? 'active' : 'completed') : '' ?>">
-                    <div class="stepper-icon"><?= $order['status'] === 'pending' ? '●' : icon('check', 'no-margin', 14) ?></div>
+                    <div class="stepper-icon"><?= $order['status'] === 'pending' ? icon('clock', 'no-margin', 13) : icon('check', 'no-margin', 14) ?></div>
                     <div class="stepper-label">Chờ duyệt</div>
                 </div>
                 <div class="stepper-item <?= in_array($order['status'], ['shipping', 'completed']) ? ($order['status'] === 'shipping' ? 'active' : 'completed') : '' ?>">
-                    <div class="stepper-icon"><?= $order['status'] === 'shipping' ? '●' : ($order['status'] === 'completed' ? icon('check', 'no-margin', 14) : '3') ?></div>
+                    <div class="stepper-icon"><?= $order['status'] === 'shipping' ? icon('truck', 'no-margin', 13) : ($order['status'] === 'completed' ? icon('check', 'no-margin', 14) : '3') ?></div>
                     <div class="stepper-label">Đang giao hàng</div>
                 </div>
                 <div class="stepper-item <?= $order['status'] === 'completed' ? 'completed' : '' ?>">

@@ -14,7 +14,18 @@ $flash = get_flash();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= isset($page_title) ? e($page_title) . ' — ' : '' ?><?= e(APP_NAME) ?> // <?= e(APP_SUB_TITLE) ?></title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>css/style.css?v=3.0">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/style.css?v=4.1">
+    <script>
+        (function() {
+            var saved = localStorage.getItem('theme');
+            var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (saved === 'dark' || (!saved && prefersDark)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
     <script>window.BASE_URL = '<?= BASE_URL ?>'; window.CSRF_TOKEN = '<?= csrf_token() ?>';</script>
 </head>
 <body>
@@ -68,8 +79,13 @@ $flash = get_flash();
                 <?php endif; ?>
             </nav>
 
-            <!-- Tiện Ích: Giỏ Hàng & Tài Khoản -->
+            <!-- Tiện Ích: Giỏ Hàng, Chế Độ Sáng/Tối & Tài Khoản -->
             <div class="header-actions">
+                <button type="button" id="theme-toggle" class="theme-toggle-btn" title="Chuyển chế độ Sáng / Tối" aria-label="Chuyển chế độ Sáng / Tối">
+                    <span class="theme-icon-sun"><?= icon('sun', 'no-margin', 16) ?></span>
+                    <span class="theme-icon-moon"><?= icon('moon', 'no-margin', 16) ?></span>
+                </button>
+
                 <a href="<?= BASE_URL ?>cart.php" class="cart-pill" title="Mở giỏ hàng">
                     <?= icon('bag', '', 16) ?>
                     <span>Giỏ hàng</span>

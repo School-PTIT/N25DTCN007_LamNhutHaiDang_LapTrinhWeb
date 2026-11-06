@@ -166,8 +166,8 @@ require_once __DIR__ . '/../includes/header.php';
                                 <?= format_currency($lp['price']) ?>
                             </td>
                             <td>
-                                <span class="badge-status <?= $lp['stock'] <= 3 ? 'badge-cancelled' : 'badge-pending' ?>">
-                                    ● Còn <?= $lp['stock'] ?> chiếc
+                                <span class="badge-status <?= $lp['stock'] <= 3 ? 'badge-cancelled' : 'badge-pending' ?>" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+                                    <span class="status-indicator-dot <?= $lp['stock'] <= 3 ? 'dot-warning' : 'dot-ready' ?>"></span> Còn <?= $lp['stock'] ?> chiếc
                                 </span>
                             </td>
                             <td style="text-align: right; padding-right: 1.5rem;">
