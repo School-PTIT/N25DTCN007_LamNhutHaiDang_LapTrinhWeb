@@ -60,7 +60,7 @@ require_once __DIR__ . '/../includes/header.php';
     <!-- TIÊU CHÍ D2: DANH SÁCH CÓ PHÂN TRANG, THÊM, SỬA, XÓA -->
     <div class="manifest-card" style="padding: 0; overflow: hidden;">
         <table class="cart-table" style="margin-bottom: 0;">
-            <thead style="background: #fafafc;">
+            <thead style="background: var(--bg-subtle);">
                 <tr>
                     <th style="width: 80px; padding-left: 1.5rem;">ẢNH</th>
                     <th>MÃ SKU / TÊN THIẾT BỊ</th>

@@ -10,14 +10,14 @@ FTP_PASS = "xununam449977"
 
 files_to_upload = [
     ("css/style.css", "htdocs/css/style.css"),
-    ("js/main.js", "htdocs/js/main.js"),
-    ("includes/functions.php", "htdocs/includes/functions.php"),
     ("includes/header.php", "htdocs/includes/header.php"),
-    ("includes/footer.php", "htdocs/includes/footer.php"),
-    ("index.php", "htdocs/index.php"),
+    ("login.php", "htdocs/login.php"),
     ("product.php", "htdocs/product.php"),
-    ("order-detail.php", "htdocs/order-detail.php"),
     ("admin/index.php", "htdocs/admin/index.php"),
+    ("admin/categories.php", "htdocs/admin/categories.php"),
+    ("admin/orders.php", "htdocs/admin/orders.php"),
+    ("admin/products.php", "htdocs/admin/products.php"),
+    ("admin/product-form.php", "htdocs/admin/product-form.php"),
 ]
 
 print("Connecting to FTP...")

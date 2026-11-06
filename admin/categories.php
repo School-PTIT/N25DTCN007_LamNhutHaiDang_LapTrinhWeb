@@ -148,14 +148,14 @@ require_once __DIR__ . '/../includes/header.php';
 
         <!-- Danh sách danh mục & Đổi tên / Xóa (Tiêu chí D6) -->
         <div class="manifest-card" style="padding: 0; overflow: hidden;">
-            <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-subtle); background: #fafafc;">
+            <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-subtle); background: var(--bg-subtle);">
                 <h2 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0;">
                     Các Phân Hệ Đang Hoạt Động (<?= count($categories) ?> danh mục)
                 </h2>
             </div>
 
             <table class="cart-table" style="margin-bottom: 0;">
-                <thead style="background: #fafafc;">
+                <thead style="background: var(--bg-subtle);">
                     <tr>
                         <th style="padding-left: 1.5rem;">TÊN DANH MỤC / SLUG</th>
                         <th style="text-align: center;">SẢN PHẨM</th>

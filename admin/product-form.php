@@ -234,7 +234,7 @@ require_once __DIR__ . '/../includes/header.php';
             </div>
 
             <!-- TIÊU CHÍ D3 & D7: TẢI ẢNH AN TOÀN -->
-            <div class="form-group" style="background: #fafafc; border: 1px dashed var(--border-subtle); border-radius: var(--radius-sm); padding: 1.5rem;">
+            <div class="form-group" style="background: var(--bg-subtle); border: 1px dashed var(--border-subtle); border-radius: var(--radius-sm); padding: 1.5rem;">
                 <label class="form-label" for="prod-img">
                     Hình ảnh sản phẩm (Tối đa 2MB, định dạng JPG, PNG, WEBP, SVG): <?= $is_edit ? '' : '*' ?>
                 </label>

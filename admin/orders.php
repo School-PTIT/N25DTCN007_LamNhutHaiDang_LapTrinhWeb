@@ -137,7 +137,7 @@ require_once __DIR__ . '/../includes/header.php';
     <div class="manifest-card" style="padding: 0; overflow: hidden;">
         <div class="table-responsive">
             <table class="cart-table" style="margin-bottom: 0;">
-            <thead style="background: #fafafc;">
+            <thead style="background: var(--bg-subtle);">
                 <tr>
                     <th style="padding-left: 1.5rem;">MÃ ĐƠN</th>
                     <th>NGÀY TẠO</th>

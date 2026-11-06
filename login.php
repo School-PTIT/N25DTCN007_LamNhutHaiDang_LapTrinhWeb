@@ -149,7 +149,7 @@ require_once __DIR__ . '/includes/header.php';
         </form>
 
         <!-- Tài khoản mẫu để chấm điểm -->
-        <div style="background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 1rem; margin-top: 2rem; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.8;">
+        <div class="test-account-box" style="border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 1rem; margin-top: 2rem; font-size: 0.8rem; line-height: 1.8;">
             <div style="color: var(--text-primary); font-weight: 700; margin-bottom: 0.2rem;">TÀI KHOẢN CHẤM THỬ (MỤC 2 BÁO CÁO):</div>
             <div>• Quản trị viên: <code>admin@lab.ptit.edu.vn</code> / <code>admin123</code></div>
             <div>• Khách hàng: <code>khachhang1@gmail.com</code> / <code>customer123</code></div>

@@ -64,7 +64,7 @@ require_once __DIR__ . '/includes/header.php';
     <!-- KHỐI CHI TIẾT SẢN PHẨM -->
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 3.5rem; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 2.5rem; box-shadow: var(--shadow-card);">
         <!-- Cột trái: Ảnh sản phẩm khung Studio -->
-        <div style="background: #f8f9fa; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 2.5rem; display: flex; align-items: center; justify-content: center;">
+        <div class="product-detail-img-box" style="border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 2.5rem; display: flex; align-items: center; justify-content: center;">
             <img src="<?= BASE_URL ?>uploads/<?= e($product['image']) ?>" alt="<?= e($product['name']) ?>" style="max-height: 340px; width: auto; object-fit: contain;">
         </div>
 

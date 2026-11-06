@@ -138,7 +138,7 @@ require_once __DIR__ . '/../includes/header.php';
 
         <div class="manifest-card" style="padding: 0; overflow: hidden;">
             <table class="cart-table" style="margin-bottom: 0;">
-                <thead style="background: #fafafc;">
+                <thead class="table-head">
                     <tr>
                         <th style="padding-left: 1.5rem;">MÃ SKU</th>
                         <th>TÊN THIẾT BỊ</th>
@@ -195,7 +195,7 @@ require_once __DIR__ . '/../includes/header.php';
 
         <div class="manifest-card" style="padding: 0; overflow: hidden;">
             <table class="cart-table" style="margin-bottom: 0;">
-                <thead style="background: #fafafc;">
+                <thead class="table-head">
                     <tr>
                         <th style="padding-left: 1.5rem;">MÃ VẬN ĐƠN</th>
                         <th>NGÀY ĐẶT</th>
