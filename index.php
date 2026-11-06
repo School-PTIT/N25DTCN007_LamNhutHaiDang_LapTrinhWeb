@@ -10,7 +10,7 @@ require_once __DIR__ . '/includes/init.php';
 $page_title = 'Bộ Sưu Tập Thiết Bị Công Nghệ';
 
 // 1. Thu thập bộ lọc & Từ khóa tìm kiếm (Tiêu chí B4)
-$category_id = isset($_GET['cat']) ? (int)$_GET['cat'] : 0;
+$category_id = isset($_GET['cat']) ? (int)$_GET['cat'] : (isset($_GET['category']) ? (int)$_GET['category'] : 0);
 $keyword = trim($_GET['q'] ?? '');
 
 // 2. Sắp xếp an toàn theo Whitelist (Tiêu chí B6: Không ghép tham số vào SQL)
@@ -214,7 +214,7 @@ require_once __DIR__ . '/includes/header.php';
                                 <a href="<?= BASE_URL ?>product.php?id=<?= $prod['id'] ?>" class="btn-icon" title="Xem chi tiết">
                                     Chi tiết
                                 </a>
-                                <form action="<?= BASE_URL ?>cart-add.php" method="POST" style="margin: 0;">
+                                <form action="<?= BASE_URL ?>cart-add.php" method="POST" style="margin: 0; width: 100%;">
                                     <?= csrf_field() ?>
                                     <input type="hidden" name="product_id" value="<?= $prod['id'] ?>">
                                     <input type="hidden" name="quantity" value="1">
