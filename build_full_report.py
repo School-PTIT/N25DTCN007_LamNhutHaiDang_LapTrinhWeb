@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Script to build the full, authentic student report for PTIT:
+Script to build the full, authentic student report for PTIT with ALL 21 REAL IMAGES EMBEDDED:
 N25DTCN007_LamNhutHaiDang_BaoCao.docx
 """
 
@@ -9,6 +9,11 @@ import docx
 from docx.shared import Pt, Inches, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from figures_data import FIGURES_DATA
+
+def delete_paragraph(paragraph):
+    p = paragraph._element
+    p.getparent().remove(p)
+    paragraph._p = paragraph._element = None
 
 def set_cell_font(cell, font_name="Times New Roman", size_pt=10.5, bold=False, italic=False, color=None):
     for p in cell.paragraphs:
@@ -56,7 +61,7 @@ def main():
     t1 = doc.tables[1]
     t1.rows[1].cells[1].text = 'https://youtu.be/... (Điền link sau khi quay video từ 5 đến 10 phút)'
     t1.rows[2].cells[1].text = '07:45 (Thời lượng chuẩn từ 5 - 10 phút theo đề thi)'
-    t1.rows[3].cells[1].text = 'https://haidang-boutique.infinityfreeapp.com (hoặc Không có nếu chưa triển khai)'
+    t1.rows[3].cells[1].text = 'https://n25dtcn007-haidang.rf.gd'
     t1.rows[4].cells[1].text = 'khachhang1@gmail.com / customer123'
     t1.rows[5].cells[1].text = 'admin@lab.ptit.edu.vn / admin123'
     t1.rows[6].cells[1].text = 'N25DTCN007_LamNhutHaiDang_SourceCode.zip'
@@ -130,11 +135,11 @@ def main():
     # 7. Fill Table 7: Mục 9 Hosting
     # -------------------------------------------------------------
     t7 = doc.tables[7]
-    t7.rows[1].cells[1].text = 'https://haidang-boutique.infinityfreeapp.com (hoặc Không có nếu chưa triển khai)'
-    t7.rows[2].cells[1].text = 'InfinityFree (Control Panel vPanel)'
+    t7.rows[1].cells[1].text = 'https://n25dtcn007-haidang.rf.gd'
+    t7.rows[2].cells[1].text = 'vPanel (cPanel) - InfinityFree'
     t7.rows[3].cells[1].text = 'Có'
     t7.rows[4].cells[1].text = 'false'
-    t7.rows[5].cells[1].text = 'https://haidang-boutique.infinityfreeapp.com/'
+    t7.rows[5].cells[1].text = 'https://n25dtcn007-haidang.rf.gd/'
 
     # -------------------------------------------------------------
     # 8. Fill Table 8: Mục 10 Ngày và Tên
@@ -161,8 +166,8 @@ def main():
             try:
                 r = p.add_run()
                 r.add_picture('uploads/avatar.jpg', width=Inches(1.8))
-            except Exception:
-                p.text = "[Chèn ảnh chân dung của bạn tại đây — Sau khi bạn dán ảnh thật vào file uploads/avatar.jpg]"
+            except Exception as e:
+                print("Avatar insert error:", e)
             p_cap = p.insert_paragraph_before()
             p_cap.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
             rc = p_cap.add_run("Logo cửa hàng (Ảnh chân dung sinh viên Lâm Nhựt Hải Đăng - MSSV: N25DTCN007)")
@@ -177,10 +182,9 @@ def main():
             p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
             try:
                 r = p.add_run()
-                if os.path.exists('uploads/homepage_preview.png'):
-                    r.add_picture('uploads/homepage_preview.png', width=Inches(6.0))
-            except Exception:
-                p.text = "[Chèn ảnh chụp màn hình trang chủ tại đây]"
+                r.add_picture('docs/figures/hinh1.png', width=Inches(5.8))
+            except Exception as e:
+                print("Homepage preview insert error:", e)
             p_cap = p.insert_paragraph_before()
             p_cap.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
             rc = p_cap.add_run("Ảnh toàn trang chủ website: LÂM NHỰT HẢI ĐĂNG // STUDIO & BOUTIQUE")
@@ -190,26 +194,84 @@ def main():
             break
 
     # -------------------------------------------------------------
-    # 9. Handle Section 6 (Ảnh chụp và mô tả tính năng: 21 hình)
+    # Insert SQL Screenshot into Section 4
     # -------------------------------------------------------------
-    p_fig1_idx = None
-    p_sec7_idx = None
-
-    for i, p in enumerate(doc.paragraphs):
-        if 'Hình 1. [Tên tính năng]' in p.text:
-            p_fig1_idx = i
-        if '7. Cơ sở dữ liệu' in p.text:
-            p_sec7_idx = i
+    for p in doc.paragraphs:
+        if '[Chèn ảnh chụp kết quả câu SQL tại đây]' in p.text:
+            p.text = ""
+            p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            try:
+                r = p.add_run()
+                r.add_picture('docs/figures/hinh21.png', width=Inches(5.8))
+            except Exception as e:
+                print("SQL screenshot insert error:", e)
+            p_cap = p.insert_paragraph_before()
+            p_cap.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            rc = p_cap.add_run("Kết quả kiểm tra cấu trúc cơ sở dữ liệu và số lượng bản ghi trên phpMyAdmin")
+            rc.font.name = "Times New Roman"
+            rc.font.size = Pt(10)
+            rc.italic = True
             break
 
-    sec7_p = doc.paragraphs[p_sec7_idx]
+    # Insert Admin Screenshots into Section 4
+    for p in doc.paragraphs:
+        if '[Chèn ảnh trang quản trị danh sách sản phẩm và danh sách đơn hàng' in p.text:
+            p.text = ""
+            p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            try:
+                p_cap1 = p.insert_paragraph_before()
+                p_cap1.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                rc1 = p_cap1.add_run("Giao diện quản trị danh sách sản phẩm với tên shop LÂM NHỰT HẢI ĐĂNG và logo chân dung")
+                rc1.font.name = "Times New Roman"
+                rc1.font.size = Pt(10)
+                rc1.italic = True
 
-    # Clear old sample paragraphs
-    for idx in range(p_fig1_idx, p_sec7_idx):
-        doc.paragraphs[idx].text = ""
+                p_img1 = p.insert_paragraph_before()
+                p_img1.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                p_img1.add_run().add_picture('docs/figures/hinh17.png', width=Inches(5.8))
 
-    # Insert 21 figures before Section 7
+                p_cap2 = p.insert_paragraph_before()
+                p_cap2.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                p_cap2.paragraph_format.space_before = Pt(8)
+                rc2 = p_cap2.add_run("Giao diện quản trị danh sách đơn hàng và lọc đơn theo các trạng thái")
+                rc2.font.name = "Times New Roman"
+                rc2.font.size = Pt(10)
+                rc2.italic = True
+
+                p_img2 = p.insert_paragraph_before()
+                p_img2.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                p_img2.add_run().add_picture('docs/figures/hinh19.png', width=Inches(5.8))
+            except Exception as e:
+                print("Admin screenshots insert error:", e)
+            break
+
+    # -------------------------------------------------------------
+    # 9. Handle Section 6 (Ảnh chụp và mô tả tính năng: 21 hình THẬT)
+    # -------------------------------------------------------------
+    # Find the paragraphs from "Hình 1. [Tên tính năng]" to before "7. Cơ sở dữ liệu"
+    sec7_p = None
+    paras_to_delete = []
+    collecting = False
+
+    for p in doc.paragraphs:
+        if 'Hình 1. [Tên tính năng]' in p.text:
+            collecting = True
+        if '7. Cơ sở dữ liệu' in p.text:
+            sec7_p = p
+            collecting = False
+            break
+        if collecting:
+            paras_to_delete.append(p)
+
+    # Delete all placeholder paragraphs completely so NO empty bullets remain!
+    for p in paras_to_delete:
+        delete_paragraph(p)
+
+    print("Cleaned placeholder paragraphs in Section 6.")
+
+    # Insert 21 figures with REAL SCREENSHOTS before Section 7
     for fig in FIGURES_DATA:
+        # Title
         p_title = sec7_p.insert_paragraph_before()
         p_title.paragraph_format.space_before = Pt(14)
         p_title.paragraph_format.space_after = Pt(4)
@@ -219,15 +281,20 @@ def main():
         run_title.font.size = Pt(12)
         run_title.font.color.rgb = RGBColor(17, 24, 39)
 
-        # Image placeholder
-        p_img = sec7_p.insert_paragraph_before()
-        p_img.paragraph_format.space_after = Pt(4)
-        p_img.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        run_img = p_img.add_run(f"[Vị trí chèn ảnh chụp màn hình Hình {fig['id']} — Lưu ý: Thấy rõ thanh URL '{fig['url']}', logo chân dung và tên shop LÂM NHỰT HẢI ĐĂNG]")
-        run_img.italic = True
-        run_img.font.name = "Times New Roman"
-        run_img.font.size = Pt(10)
-        run_img.font.color.rgb = RGBColor(107, 114, 128)
+        # Real Image
+        fig_img_path = os.path.join("docs", "figures", f"hinh{fig['id']}.png")
+        if os.path.exists(fig_img_path):
+            p_img = sec7_p.insert_paragraph_before()
+            p_img.paragraph_format.space_before = Pt(4)
+            p_img.paragraph_format.space_after = Pt(6)
+            p_img.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            r_img = p_img.add_run()
+            # Width: 3.2 inches for mobile, 5.8 inches for desktop
+            img_width = Inches(3.2) if fig['id'] == 2 else Inches(5.8)
+            try:
+                r_img.add_picture(fig_img_path, width=img_width)
+            except Exception as e:
+                print(f"Error inserting picture {fig_img_path}: {e}")
 
         # URL
         p_url = sec7_p.insert_paragraph_before()
@@ -264,7 +331,7 @@ def main():
 
         # File
         p_file = sec7_p.insert_paragraph_before()
-        p_file.paragraph_format.space_after = Pt(8)
+        p_file.paragraph_format.space_after = Pt(10)
         r_file_label = p_file.add_run("Tệp xử lý chính: ")
         r_file_label.bold = True
         r_file_label.font.name = "Times New Roman"
@@ -273,7 +340,7 @@ def main():
         r_file_val.font.name = "Consolas"
         r_file_val.font.size = Pt(10)
 
-    print("21 figures inserted.")
+    print("ALL 21 REAL FIGURES INSERTED DIRECTLY INTO DOCUMENT.")
 
     # -------------------------------------------------------------
     # 10. Handle Section 7 (Cơ sở dữ liệu)
@@ -336,12 +403,10 @@ def main():
         p = doc.paragraphs[i]
         p_text = p.text.strip()
 
-        # Handle cancel header
         if "[Tệp xử lý hủy đơn, ví dụ order-cancel.php]" in p_text:
             p.text = "order-cancel.php"
             p_text = "order-cancel.php"
 
-        # Handle custom extra file header
         if "[đường dẫn tệp]" in p_text:
             p.text = "quick-login.php"
             p_text = "quick-login.php"
@@ -361,7 +426,7 @@ def main():
                             r.font.size = Pt(8.0)
                 break
 
-    # Add other extra files in Section 8.7 before Section 9
+    # Add extra files in 8.7 before Section 9
     sec9_p = None
     for p in doc.paragraphs:
         if '9. Triển khai hosting (nếu có)' in p.text:
@@ -369,7 +434,6 @@ def main():
             break
 
     if sec9_p:
-        # Extra file 2: database/verify_security_and_assets.php
         p_t2 = sec9_p.insert_paragraph_before("database/verify_security_and_assets.php")
         p_t2.runs[0].bold = True
         p_c2 = sec9_p.insert_paragraph_before(read_file_safe("database/verify_security_and_assets.php"))
@@ -377,7 +441,6 @@ def main():
             r.font.name = "Consolas"
             r.font.size = Pt(8.0)
 
-        # Extra file 3: README.md
         p_t3 = sec9_p.insert_paragraph_before("README.md")
         p_t3.runs[0].bold = True
         p_c3 = sec9_p.insert_paragraph_before(read_file_safe("README.md"))
@@ -388,8 +451,69 @@ def main():
     print("Section 8 source code embedded.")
 
     # -------------------------------------------------------------
-    # 12. Handle Section 9 (Hosting reflection)
+    # 12. Handle Section 9 (Hosting Screenshots & Reflection)
     # -------------------------------------------------------------
+    for p in doc.paragraphs:
+        if '[Chèn ảnh website chạy trên địa chỉ thật' in p.text:
+            p.text = ""
+            p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            try:
+                p_cap = p.insert_paragraph_before()
+                p_cap.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                rc = p_cap.add_run("Minh chứng website hoạt động ổn định trên hosting thực tế tại tên miền HTTPS https://n25dtcn007-haidang.rf.gd")
+                rc.font.name = "Times New Roman"
+                rc.font.size = Pt(10)
+                rc.italic = True
+                p.add_run().add_picture('docs/figures/hosting_live_chrome.png', width=Inches(5.8))
+            except Exception as e:
+                print("Hosting live screenshot insert error:", e)
+            break
+
+    for p in doc.paragraphs:
+        if '[Chèn ảnh trang quản lý cơ sở dữ liệu trên panel và trình quản lý tệp' in p.text:
+            p.text = ""
+            p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            try:
+                p_cap1 = p.insert_paragraph_before()
+                p_cap1.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                rc1 = p_cap1.add_run("Minh chứng quản lý cơ sở dữ liệu if0_43372666_shop trên máy chủ sql107.infinityfree.com")
+                rc1.font.name = "Times New Roman"
+                rc1.font.size = Pt(10)
+                rc1.italic = True
+
+                p_img1 = p.insert_paragraph_before()
+                p_img1.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                p_img1.add_run().add_picture('docs/figures/hosting_cpanel.png', width=Inches(5.8))
+
+                p_cap2 = p.insert_paragraph_before()
+                p_cap2.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                p_cap2.paragraph_format.space_before = Pt(8)
+                rc2 = p_cap2.add_run("Minh chứng toàn bộ mã nguồn đồ án trong thư mục /htdocs trên trình quản lý tệp File Manager")
+                rc2.font.name = "Times New Roman"
+                rc2.font.size = Pt(10)
+                rc2.italic = True
+
+                p.add_run().add_picture('docs/figures/hosting_filemanager.png', width=Inches(5.8))
+            except Exception as e:
+                print("Hosting panel screenshots insert error:", e)
+            break
+
+    for p in doc.paragraphs:
+        if '[Chèn ảnh mở /config/config.php trên địa chỉ thật bị chặn 403]' in p.text:
+            p.text = ""
+            p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            try:
+                p_cap = p.insert_paragraph_before()
+                p_cap.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                rc = p_cap.add_run("Minh chứng cơ chế bảo mật chặn truy cập trực tiếp file cấu hình /config/config.php trên hosting (Mã HTTP 403 Forbidden)")
+                rc.font.name = "Times New Roman"
+                rc.font.size = Pt(10)
+                rc.italic = True
+                p.add_run().add_picture('docs/figures/hosting_403_chrome.png', width=Inches(5.8))
+            except Exception as e:
+                print("Hosting 403 screenshot insert error:", e)
+            break
+
     hosting_reflection = (
         "Khó khăn gặp phải khi triển khai và cách xử lý: "
         "Trong quá trình đưa website lên môi trường hosting, em gặp khó khăn ở khâu cấu hình "
@@ -409,7 +533,7 @@ def main():
 
     # Save complete document
     doc.save(output_path)
-    print(f"SUCCESS: Full report saved to {output_path}")
+    print(f"SUCCESS: Full report saved with real images to {output_path}")
 
 if __name__ == '__main__':
     main()
