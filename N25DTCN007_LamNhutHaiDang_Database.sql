@@ -165,7 +165,7 @@ INSERT INTO orders (id, user_id, order_code, recipient_name, recipient_phone, sh
 (1, 2, 'ORD-2026-001', 'Nguyễn Hoàng Long', '0987654321', 'Số 45 Lê Duẩn, Quận 1, TP. Hồ Chí Minh', 5640000, 'pending', 'Giao giờ hành chính, gọi trước khi đến.', '2026-11-03 09:15:00'),
 (2, 2, 'ORD-2026-002', 'Nguyễn Hoàng Long', '0987654321', 'Số 45 Lê Duẩn, Quận 1, TP. Hồ Chí Minh', 54900000, 'shipping', 'Đơn hàng giá trị cao, yêu cầu đồng kiểm hàng.', '2026-11-02 14:30:00'),
 (3, 3, 'ORD-2026-003', 'Trần Minh Trang', '0903112233', 'Số 12 Chùa Bộc, Đống Đa, Hà Nội', 4990000, 'completed', 'Đã nhận đủ hàng và test thử âm thanh loa rất tốt.', '2026-10-28 10:00:00'),
-(4, 3, 'ORD-2026-004', 'Trần Minh Trang', '0903112233', 'Số 12 Chùa Bộc, Đống Đa, Hà Nội', 2490000, 'completed', 'Bàn phím gõ rất mượt, đóng gói cẩn thận.', '2026-10-30 16:45:00'),
+(4, 3, 'ORD-2026-004', 'Trần Minh Trang', '0903112233', 'Số 12 Chùa Bộc, Đống Đa, Hà Nội', 2490000, 'pending', 'Đang chờ xác nhận điều chuyển kho chi nhánh.', '2026-10-30 16:45:00'),
 (5, 2, 'ORD-2026-005', 'Nguyễn Hoàng Long', '0987654321', 'Số 45 Lê Duẩn, Quận 1, TP. Hồ Chí Minh', 3150000, 'cancelled', 'Khách hàng đặt nhầm màu phím, đã hủy đơn.', '2026-11-01 11:20:00');
 
 -- 5. Seed Order Items (Lưu đơn giá tại thời điểm mua)
